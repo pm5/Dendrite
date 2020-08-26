@@ -4,6 +4,7 @@ import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
 import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
 import * as ReactNative from "react-native";
+import * as ReactNativeEddystone from "@lg2/react-native-eddystone";
 import * as NewAppScreen from "react-native/Libraries/NewAppScreen";
 import * as OpenURLInBrowser from "react-native/Libraries/Core/Devtools/openURLInBrowser";
 
@@ -98,39 +99,39 @@ function App$LotsOfGreetings(Props) {
   return React.createElement(ReactNative.FlatList, {
               data: [
                 {
-                  key: "Devin"
+                  name: "Devin"
                 },
                 {
-                  key: "Dan"
+                  name: "Dan"
                 },
                 {
-                  key: "Dominic"
+                  name: "Dominic"
                 },
                 {
-                  key: "Jackson"
+                  name: "Jackson"
                 },
                 {
-                  key: "James"
+                  name: "James"
                 },
                 {
-                  key: "Joel"
+                  name: "Joel"
                 },
                 {
-                  key: "Jane"
+                  name: "Jane"
                 },
                 {
-                  key: "John"
+                  name: "John"
                 },
                 {
-                  key: "Jillion"
+                  name: "Jillion"
                 }
               ],
               keyExtractor: (function (item, param) {
-                  return item.key;
+                  return item.name;
                 }),
               renderItem: (function (param) {
                   return React.createElement(App$Greeting, {
-                              name: param.item.key
+                              name: param.item.name
                             });
                 })
             });
@@ -140,98 +141,179 @@ var LotsOfGreetings = {
   make: App$LotsOfGreetings
 };
 
+function App$Movies(Props) {
+  var match = React.useState(function () {
+        return [];
+      });
+  var setMovies = match[1];
+  var match$1 = React.useState(function () {
+        return true;
+      });
+  var setLoading = match$1[1];
+  var loading = match$1[0];
+  React.useEffect((function () {
+          fetch("https://reactnative.dev/movies.json").then(function (prim) {
+                      return prim.text();
+                    }).then(function (text) {
+                    return Promise.resolve(JSON.parse(text));
+                  }).then(function (moviesData) {
+                  Curry._1(setMovies, (function (param) {
+                          return moviesData.movies;
+                        }));
+                  Curry._1(setLoading, (function (param) {
+                          return false;
+                        }));
+                  return Promise.resolve(undefined);
+                }).catch(function (error) {
+                return Promise.resolve((console.log(error), undefined));
+              });
+          return (function (param) {
+                    
+                  });
+        }), [loading]);
+  if (loading) {
+    return React.createElement(ReactNative.View, {
+                style: styles.sectionContainer,
+                children: React.createElement(ReactNative.Text, {
+                      children: "LOADING..."
+                    })
+              });
+  } else {
+    return React.createElement(ReactNative.View, {
+                style: styles.sectionContainer,
+                children: null
+              }, React.createElement(ReactNative.FlatList, {
+                    data: match[0],
+                    keyExtractor: (function (item, param) {
+                        return item.id;
+                      }),
+                    renderItem: (function (param) {
+                        var item = param.item;
+                        return React.createElement(ReactNative.View, {
+                                    children: null
+                                  }, React.createElement(ReactNative.Text, {
+                                        children: item.id
+                                      }), React.createElement(ReactNative.Text, {
+                                        children: item.title
+                                      }), React.createElement(ReactNative.Text, {
+                                        children: item.releaseYear
+                                      }));
+                      })
+                  }), React.createElement(ReactNative.Button, {
+                    onPress: (function (_event) {
+                        return Curry._1(setLoading, (function (param) {
+                                      return true;
+                                    }));
+                      }),
+                    title: "Reload"
+                  }));
+  }
+}
+
+var Movies = {
+  make: App$Movies
+};
+
 function App$app(Props) {
+  var logger = function (url) {
+    console.log(url.url);
+    
+  };
+  ReactNativeEddystone.default.addListener("onURLFrame", logger);
+  ReactNativeEddystone.default.startScanning();
+  ReactNativeEddystone.default.stopScanning();
+  ReactNativeEddystone.default.removeListener("onURLFrame", logger);
   return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.StatusBar, {
                   barStyle: "dark-content"
                 }), React.createElement(ReactNative.SafeAreaView, {
-                  children: null
-                }, React.createElement(App$LotsOfGreetings, {}), React.createElement(ReactNative.ScrollView, {
-                      contentInsetAdjustmentBehavior: "automatic",
-                      style: styles.scrollView,
-                      children: null
-                    }, Belt_Option.isNone(global.HermesInternal) ? null : React.createElement(ReactNative.View, {
-                            style: styles.engine,
-                            children: React.createElement(ReactNative.Text, {
-                                  style: styles.footer,
-                                  children: "Engine: Hermes"
-                                })
-                          }), React.createElement(NewAppScreen.Header, {}), React.createElement(ReactNative.View, {
-                          style: styles.body,
-                          children: null
-                        }, React.createElement(App$Greeting, {
-                              name: "pm5"
-                            }), React.createElement(ReactNative.View, {
-                              style: styles.sectionContainer,
-                              children: null
-                            }, React.createElement(ReactNative.Text, {
-                                  style: styles.sectionTitle,
-                                  children: "Step One"
-                                }), React.createElement(ReactNative.Text, {
-                                  style: styles.sectionDescription,
-                                  children: null
-                                }, "Edit ", React.createElement(ReactNative.Text, {
-                                      style: styles.highlight,
-                                      children: "src/App.re"
-                                    }), " to change this screen and then come back to see your edits.")), React.createElement(ReactNative.View, {
-                              style: styles.sectionContainer,
-                              children: null
-                            }, React.createElement(ReactNative.Text, {
-                                  style: styles.sectionTitle,
-                                  children: "See Your Changes"
-                                }), React.createElement(ReactNative.Text, {
-                                  style: styles.sectionDescription,
-                                  children: React.createElement(NewAppScreen.ReloadInstructions, {})
-                                })), React.createElement(ReactNative.View, {
-                              style: styles.sectionContainer,
-                              children: null
-                            }, React.createElement(ReactNative.Text, {
-                                  style: styles.sectionTitle,
-                                  children: "Debug"
-                                }), React.createElement(ReactNative.Text, {
-                                  style: styles.sectionDescription,
-                                  children: React.createElement(NewAppScreen.DebugInstructions, {})
-                                })), React.createElement(ReactNative.View, {
-                              style: styles.sectionContainer,
-                              children: null
-                            }, React.createElement(ReactNative.Text, {
-                                  style: styles.sectionTitle,
-                                  children: "Learn More"
-                                }), React.createElement(ReactNative.Text, {
-                                  style: styles.sectionDescription,
-                                  children: "Read the docs to discover what to do next:"
-                                })), React.createElement(ReactNative.View, {
-                              style: styles.sectionContainer,
-                              children: null
-                            }, React.createElement(ReactNative.Text, {
-                                  style: styles.sectionDescription,
-                                  children: React.createElement(ReactNative.Text, {
-                                        style: styles.highlight,
-                                        children: "Reason React Native"
-                                      })
-                                }), React.createElement(ReactNative.TouchableOpacity, {
-                                  onPress: (function (param) {
-                                      OpenURLInBrowser.default("https://reason-react-native.github.io/en/docs/");
-                                      
-                                    }),
-                                  children: React.createElement(ReactNative.Text, {
-                                        style: {
-                                          color: NewAppScreen.Colors.primary,
-                                          fontSize: 18,
-                                          fontWeight: "400",
-                                          marginTop: 8
-                                        },
-                                        children: "https://reason-react-native.github.io/"
-                                      })
-                                })), React.createElement(ReactNative.View, {
-                              style: styles.sectionContainer,
+                  children: React.createElement(ReactNative.ScrollView, {
+                        contentInsetAdjustmentBehavior: "automatic",
+                        style: styles.scrollView,
+                        children: null
+                      }, Belt_Option.isNone(global.HermesInternal) ? null : React.createElement(ReactNative.View, {
+                              style: styles.engine,
                               children: React.createElement(ReactNative.Text, {
+                                    style: styles.footer,
+                                    children: "Engine: Hermes"
+                                  })
+                            }), React.createElement(NewAppScreen.Header, {}), React.createElement(ReactNative.View, {
+                            style: styles.body,
+                            children: null
+                          }, React.createElement(App$Movies, {}), React.createElement(App$Greeting, {
+                                name: "pm5"
+                              }), React.createElement(ReactNative.View, {
+                                style: styles.sectionContainer,
+                                children: null
+                              }, React.createElement(ReactNative.Text, {
+                                    style: styles.sectionTitle,
+                                    children: "Step One"
+                                  }), React.createElement(ReactNative.Text, {
+                                    style: styles.sectionDescription,
+                                    children: null
+                                  }, "Edit ", React.createElement(ReactNative.Text, {
+                                        style: styles.highlight,
+                                        children: "src/App.re"
+                                      }), " to change this screen and then come back to see your edits.")), React.createElement(ReactNative.View, {
+                                style: styles.sectionContainer,
+                                children: null
+                              }, React.createElement(ReactNative.Text, {
+                                    style: styles.sectionTitle,
+                                    children: "See Your Changes"
+                                  }), React.createElement(ReactNative.Text, {
+                                    style: styles.sectionDescription,
+                                    children: React.createElement(NewAppScreen.ReloadInstructions, {})
+                                  })), React.createElement(ReactNative.View, {
+                                style: styles.sectionContainer,
+                                children: null
+                              }, React.createElement(ReactNative.Text, {
+                                    style: styles.sectionTitle,
+                                    children: "Debug"
+                                  }), React.createElement(ReactNative.Text, {
+                                    style: styles.sectionDescription,
+                                    children: React.createElement(NewAppScreen.DebugInstructions, {})
+                                  })), React.createElement(ReactNative.View, {
+                                style: styles.sectionContainer,
+                                children: null
+                              }, React.createElement(ReactNative.Text, {
+                                    style: styles.sectionTitle,
+                                    children: "Learn More"
+                                  }), React.createElement(ReactNative.Text, {
+                                    style: styles.sectionDescription,
+                                    children: "Read the docs to discover what to do next:"
+                                  })), React.createElement(ReactNative.View, {
+                                style: styles.sectionContainer,
+                                children: null
+                              }, React.createElement(ReactNative.Text, {
                                     style: styles.sectionDescription,
                                     children: React.createElement(ReactNative.Text, {
                                           style: styles.highlight,
-                                          children: "React Native"
+                                          children: "Reason React Native"
                                         })
-                                  })
-                            }), React.createElement(NewAppScreen.LearnMoreLinks, {})))));
+                                  }), React.createElement(ReactNative.TouchableOpacity, {
+                                    onPress: (function (param) {
+                                        OpenURLInBrowser.default("https://reason-react-native.github.io/en/docs/");
+                                        
+                                      }),
+                                    children: React.createElement(ReactNative.Text, {
+                                          style: {
+                                            color: NewAppScreen.Colors.primary,
+                                            fontSize: 18,
+                                            fontWeight: "400",
+                                            marginTop: 8
+                                          },
+                                          children: "https://reason-react-native.github.io/"
+                                        })
+                                  })), React.createElement(ReactNative.View, {
+                                style: styles.sectionContainer,
+                                children: React.createElement(ReactNative.Text, {
+                                      style: styles.sectionDescription,
+                                      children: React.createElement(ReactNative.Text, {
+                                            style: styles.highlight,
+                                            children: "React Native"
+                                          })
+                                    })
+                              }), React.createElement(NewAppScreen.LearnMoreLinks, {})))
+                }));
 }
 
 var app = App$app;
@@ -244,6 +326,7 @@ export {
   styles ,
   Greeting ,
   LotsOfGreetings ,
+  Movies ,
   app ,
   
 }

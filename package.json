@@ -12,6 +12,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@lg2/react-native-eddystone": "^0.1.5",
+    "bs-fetch": "^0.6.2",
     "react": "^16.11.0",
     "react-native": "^0.62.0",
     "reason-react": "^0.9.0",
