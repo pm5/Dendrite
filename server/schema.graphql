@@ -1,8 +1,4 @@
-type Citizen {
-  id: ID!
-  pathogens: [Pathogen]
-  antibodies: [Antibody]
-}
+scalar DateTime
 
 type Pathogen {
   id: ID!
@@ -24,25 +20,48 @@ type Vaccine {
 type Antibody {
   id: ID!
   name: String!
-  bindsTo: [Pathogen]
-  expireAt: DateTime
+  version: String!
+  bindsTo: [Pathogen!]!
+  expiresInSeconds: Float!
+}
+
+type Infection {
+  pathogen: Pathogen!
+  infectedAt: DateTime!
+}
+
+type Vaccination {
+  vaccine: Vaccine!
+  adminedAt: DateTime!
+}
+
+type Immunity {
+  antibody: Antibody!
+  expiresAt: DateTime!
+}
+
+type Citizen {
+  id: ID!
+  infections: [Infection!]!
+  vaccinations: [Vaccination!]!
+  immunities: [Immunity!]!
 }
 
 input ProximityObservation {
   citizen: ID!
-  distanceInMeters: Float
-  measuredAt: DateTime
+  distanceInMeters: Float!
+  measuredAt: DateTime!
 }
 
 type Query {
-  allCitizens: [Citizen]
+  allCitizens: [Citizen!]!
   citizen(id: ID): Citizen
-  allPathogens: [Pathogen]
-  allVaccines: [Vaccine]
-  allAntibodies: [Antibody]
+  allPathogens: [Pathogen!]!
+  allVaccines: [Vaccine!]!
+  allAntibodies: [Antibody!]!
 }
 
 type Mutation {
-  updateNeighbors(citizen: ID!, neighbors: [ProximityObservation]): [Citizen]
-  updateVaccines(citizen: ID!, vaccines: [ID!]): Citizen
+  reportNeighbors(citizen: ID!, neighbors: [ProximityObservation]): [Citizen]
+  vaccinate(citizen: ID!, vaccine: ID!): Citizen
 }
