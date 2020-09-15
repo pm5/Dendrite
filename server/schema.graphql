@@ -1,0 +1,48 @@
+type Citizen {
+  id: ID!
+  pathogens: [Pathogen]
+  antibodies: [Antibody]
+}
+
+type Pathogen {
+  id: ID!
+  name: String!
+  version: String!
+  spreadDistanceInMeters: Float!
+  spreadTimeInSeconds: Float!
+  spreadRatio: Float!
+}
+
+type Vaccine {
+  id: ID!
+  name: String!
+  version: String!
+  generates: Antibody!
+  effectiveAfterSeconds: Float!
+}
+
+type Antibody {
+  id: ID!
+  name: String!
+  bindsTo: [Pathogen]
+  expireAt: DateTime
+}
+
+input ProximityObservation {
+  citizen: ID!
+  distanceInMeters: Float
+  measuredAt: DateTime
+}
+
+type Query {
+  allCitizens: [Citizen]
+  citizen(id: ID): Citizen
+  allPathogens: [Pathogen]
+  allVaccines: [Vaccine]
+  allAntibodies: [Antibody]
+}
+
+type Mutation {
+  updateNeighbors(citizen: ID!, neighbors: [ProximityObservation]): [Citizen]
+  updateVaccines(citizen: ID!, vaccines: [ID!]): Citizen
+}
