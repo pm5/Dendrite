@@ -153,9 +153,9 @@ var AppServer = ApolloServer.Make(GraphQL.Resolvers);
 var server = Curry._5(AppServer.createApolloServer, undefined, Caml_option.some(Curry._1(ApolloServer$1.gql, schema)), resolvers, undefined, undefined);
 
 server.listen({
-        port: 8000
+        port: 80
       }).then(function (param) {
-      return Promise.resolve((console.log("http://localhost:8000/"), undefined));
+      return Promise.resolve((console.log("server start"), undefined));
     });
 
 exports.pathogens = pathogens;

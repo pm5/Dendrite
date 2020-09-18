@@ -93,6 +93,6 @@ let server = AppServer.createApolloServer(~typeDefs=AppServer.gql(schema), ~reso
 
 {
   open Js.Promise
-  server->AppServer.listen({ AppServer.port: 8000 })
-    |> then_(() => Js.log("http://localhost:8000/") |> resolve)
+  server->AppServer.listen({ AppServer.port: 80 })
+    |> then_(() => Js.log("server start") |> resolve)
 }
