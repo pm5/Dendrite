@@ -2,6 +2,8 @@
   "name": "dendrite-server",
   "version": "0.1.0",
   "scripts": {
+    "prestart": "npm run build",
+    "start": "node src/App.bs.js",
     "clean": "bsb -clean-world",
     "build": "bsb -make-world",
     "watch": "bsb -make-world -w"
