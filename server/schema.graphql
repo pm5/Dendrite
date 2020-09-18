@@ -62,6 +62,6 @@ type Query {
 }
 
 type Mutation {
-  reportNeighbors(citizen: ID!, neighbors: [ProximityObservation]): [Citizen]
+  reportNeighbors(citizen: ID!, neighbors: [ProximityObservation!]!): [Citizen!]!
   vaccinate(citizen: ID!, vaccine: ID!): Citizen
 }
