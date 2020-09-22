@@ -1,0 +1,9 @@
+schema: ../server/schema.graphql
+generates:
+  src/GraphQLTypes.re:
+    plugins:
+      - reason-client
+    config:
+      scalars:
+        "DateTime": "string"
+
