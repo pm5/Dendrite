@@ -143,47 +143,56 @@ var LotsOfGreetings = {
 
 function App$Movies(Props) {
   var match = React.useState(function () {
+        return 0;
+      });
+  var setCount = match[1];
+  var match$1 = React.useState(function () {
         return [];
       });
-  var setMovies = match[1];
-  var match$1 = React.useState(function () {
+  var setMovies = match$1[1];
+  var match$2 = React.useState(function () {
         return true;
       });
-  var setLoading = match$1[1];
-  var loading = match$1[0];
+  var setLoading = match$2[1];
+  var loading = match$2[0];
   React.useEffect((function () {
-          fetch("https://reactnative.dev/movies.json").then(function (prim) {
-                      return prim.text();
-                    }).then(function (text) {
-                    return Promise.resolve(JSON.parse(text));
-                  }).then(function (moviesData) {
-                  Curry._1(setMovies, (function (param) {
-                          return moviesData.movies;
-                        }));
-                  Curry._1(setLoading, (function (param) {
-                          return false;
-                        }));
-                  return Promise.resolve(undefined);
-                }).catch(function (error) {
-                return Promise.resolve((console.log(error), undefined));
-              });
-          return (function (param) {
-                    
-                  });
+          if (loading) {
+            fetch("https://reactnative.dev/movies.json").then(function (prim) {
+                        return prim.text();
+                      }).then(function (text) {
+                      return Promise.resolve(JSON.parse(text));
+                    }).then(function (moviesData) {
+                    Curry._1(setMovies, (function (param) {
+                            return moviesData.movies;
+                          }));
+                    Curry._1(setLoading, (function (param) {
+                            return false;
+                          }));
+                    Curry._1(setCount, (function (x) {
+                            return x + 1 | 0;
+                          }));
+                    return Promise.resolve(undefined);
+                  }).catch(function (error) {
+                  return Promise.resolve((console.log(error), undefined));
+                });
+          }
+          
         }), [loading]);
   if (loading) {
     return React.createElement(ReactNative.View, {
                 style: styles.sectionContainer,
                 children: React.createElement(ReactNative.Text, {
-                      children: "LOADING..."
+                      children: "Loading..."
                     })
               });
   } else {
     return React.createElement(ReactNative.View, {
                 style: styles.sectionContainer,
                 children: null
-              }, React.createElement(ReactNative.FlatList, {
-                    data: match[0],
+              }, React.createElement(ReactNative.Text, {
+                    children: "Loaded " + String(match[0]) + " times"
+                  }), React.createElement(ReactNative.FlatList, {
+                    data: match$1[0],
                     keyExtractor: (function (item, param) {
                         return item.id;
                       }),

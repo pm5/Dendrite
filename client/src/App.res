@@ -141,29 +141,44 @@ module Movies = {
 
   @react.component
   let make = () => {
+    let (count, setCount) = React.useState(() => 0)
     let (movies, setMovies) = React.useState(() => [])
     let (loading, setLoading) = React.useState(() => true)
 
+/*
+    React.useEffect1(() => {
+      let refresh = () => {
+        setLoading(_ => true)
+      }
+      let timeoutID = Js.Global.setInterval(refresh, 4000)
+      Some(() => Js.Global.clearInterval(timeoutID))
+    }, [])
+    */
+
     React.useEffect1(() => {
       open Js.Promise
-      let _ = Fetch.fetch("https://reactnative.dev/movies.json")
-        |> then_(Fetch.Response.text)
-        |> then_(text => of_json(text) |> resolve)
-        |> then_(moviesData => {
-          setMovies(_ => moviesData.movies);
-          setLoading(_ => false);
-          resolve ()
-        })
-        |> catch(error => Js.log(error) |> resolve)
-      Some(() => ())
+      if loading {
+        let _ = Fetch.fetch("https://reactnative.dev/movies.json")
+          |> then_(Fetch.Response.text)
+          |> then_(text => of_json(text) |> resolve)
+          |> then_(moviesData => {
+            setMovies(_ => moviesData.movies)
+            setLoading(_ => false)
+            setCount(x => x + 1)
+            resolve ()
+          })
+          |> catch(error => Js.log(error) |> resolve)
+      }
+      None
     }, [ loading ])
 
     if loading {
       <View style={styles["sectionContainer"]}>
-        <Text>{"LOADING..."->React.string}</Text>
+        <Text>{"Loading..."->React.string}</Text>
       </View>
     } else {
       <View style={styles["sectionContainer"]}>
+        <Text>{`Loaded ${string_of_int(count)} times`->React.string}</Text>
         <FlatList
           data={movies}
           renderItem={({item}) => (
