@@ -76,6 +76,71 @@ let styles = {
   })
 }
 
+module BeaconScanner = {
+  let useScanner = () => {
+    let (scanning, setScanning) = React.useState(() => false)
+    let data : EddyStone.BeaconData.t =
+      { id: "0"
+      , uid : "0x00"
+      , rssi : 0.1
+      , txPower : 0.01,
+      }
+    let (beacons, setBeacons) = React.useState(() => { "beacons": [
+      data
+    ] })
+
+    let beaconListener = (d) => {
+      Js.log("wooty")
+      setBeacons(beacons => {
+        "beacons": beacons["beacons"]->Js.Array.concat([ d ])->Js.Array.slice(~start=0, ~end_=10)
+      })
+    }
+
+    React.useEffect1(() => {
+      Js.log("woot")
+      EddyStone.addListener(#onUIDFrame(beaconListener))
+      EddyStone.startScanning()
+      Some(() => {
+        EddyStone.stopScanning()
+        EddyStone.removeListener(#onUIDFrame(beaconListener))
+        Js.log("uoot")
+      })
+    }, [ scanning ])
+
+    (beacons, scanning, setScanning)
+  }
+
+  module BeaconList = {
+    @react.component
+    let make = (~data) => {
+      <FlatList
+        data=data
+        renderItem={({item}) => (
+          <View>
+            <Text>{item.EddyStone.BeaconData.uid->React.string}</Text>
+            <Text>{item.EddyStone.BeaconData.rssi->Js.Float.toString->React.string}</Text>
+            <Text>{item.EddyStone.BeaconData.txPower->Js.Float.toString->React.string}</Text>
+          </View>
+        )}
+        keyExtractor={(_, i) => string_of_int(i)}
+        />
+    }
+  }
+
+  @react.component
+  let make = () => {
+    let (beacons, scanning, setScanning) = useScanner()
+
+    <View style={styles["sectionContainer"]}>
+      <BeaconList data={beacons["beacons"]} />
+      <Button
+        onPress={ _ => setScanning(s => !s) }
+        title={ (if scanning { "Stop" } else { "Start" }) }
+        />
+    </View>
+  }
+}
+
 module Greeting = {
   @react.component
   let make = (~name) => {
@@ -178,13 +243,15 @@ module Movies = {
 @react.component
 let app = () => {
 
+  /*
   let logger = url => {
-    Js.log(url.EddyStone.url)
+    Js.log(url.EddyStone.UrlData.url)
   }
   EddyStone.addListener(#onURLFrame(logger))
   EddyStone.startScanning()
   EddyStone.stopScanning()
   EddyStone.removeListener(#onURLFrame(logger))
+  */
 
   <>
     <StatusBar barStyle=#darkContent />
@@ -197,6 +264,7 @@ let app = () => {
             </View>}
         <Header />
         <View style={styles["body"]}>
+          <BeaconScanner />
           <Movies />
           <Greeting name="pm5" />
           <View style={styles["sectionContainer"]}>

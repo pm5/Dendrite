@@ -1,21 +1,27 @@
 
-type beacon_data = {
-  id : string,
-  uid : string,
-  rssi : float,
-  txPower : float,
-};
+module BeaconData = {
+  type t = {
+    id : string,
+    uid : string,
+    rssi : float,
+    txPower : float,
+  }
+}
 
-type url_data = {
-  uid : string,
-  url : string,
-};
+module UrlData = {
+  type t = {
+    uid : string,
+    url : string,
+  }
+}
 
-type telemetry_data = {
-  uid : string,
-  voltage : float,
-  temp : float,
-};
+module TelemetryData = {
+  type t = {
+    uid : string,
+    voltage : float,
+    temp : float,
+  }
+}
 
 @bs.module("@lg2/react-native-eddystone") @bs.scope("default")
 external startScanning : unit => unit = "startScanning";
@@ -25,18 +31,18 @@ external stopScanning : unit => unit = "stopScanning";
 
 @bs.module("@lg2/react-native-eddystone") @bs.scope("default")
 external addListener : @bs.string [
-  | #onUIDFrame(beacon_data => unit)
-  | #onEIDFrame(beacon_data => unit)
-  | #onURLFrame(url_data => unit)
-  | #onTelemetryFrame(telemetry_data => unit)
+  | #onUIDFrame(BeaconData.t => unit)
+  | #onEIDFrame(BeaconData.t => unit)
+  | #onURLFrame(UrlData.t => unit)
+  | #onTelemetryFrame(TelemetryData.t => unit)
   | #onStateChanged(string => unit)
 ] => unit = "addListener";
 
 @bs.module("@lg2/react-native-eddystone") @bs.scope("default")
 external removeListener : @bs.string [
-  | #onUIDFrame(beacon_data => unit)
-  | #onEIDFrame(beacon_data => unit)
-  | #onURLFrame(url_data => unit)
-  | #onTelemetryFrame(telemetry_data => unit)
+  | #onUIDFrame(BeaconData.t => unit)
+  | #onEIDFrame(BeaconData.t => unit)
+  | #onURLFrame(UrlData.t => unit)
+  | #onTelemetryFrame(TelemetryData.t => unit)
   | #onStateChanged(string => unit)
 ] => unit = "removeListener";

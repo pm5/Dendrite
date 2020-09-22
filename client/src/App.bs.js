@@ -55,6 +55,98 @@ var styles = ReactNative.StyleSheet.create({
       }
     });
 
+function useScanner(param) {
+  var match = React.useState(function () {
+        return false;
+      });
+  var scanning = match[0];
+  var match$1 = React.useState(function () {
+        return {
+                beacons: [{
+                    id: "0",
+                    uid: "0x00",
+                    rssi: 0.1,
+                    txPower: 0.01
+                  }]
+              };
+      });
+  var setBeacons = match$1[1];
+  var beaconListener = function (d) {
+    console.log("wooty");
+    return Curry._1(setBeacons, (function (beacons) {
+                  return {
+                          beacons: [d].concat(beacons.beacons).slice(0, 10)
+                        };
+                }));
+  };
+  React.useEffect((function () {
+          console.log("woot");
+          ReactNativeEddystone.default.addListener("onUIDFrame", beaconListener);
+          ReactNativeEddystone.default.startScanning();
+          return (function (param) {
+                    ReactNativeEddystone.default.stopScanning();
+                    ReactNativeEddystone.default.removeListener("onUIDFrame", beaconListener);
+                    console.log("uoot");
+                    
+                  });
+        }), [scanning]);
+  return [
+          match$1[0],
+          scanning,
+          match[1]
+        ];
+}
+
+function App$BeaconScanner$BeaconList(Props) {
+  var data = Props.data;
+  return React.createElement(ReactNative.FlatList, {
+              data: data,
+              keyExtractor: (function (param, i) {
+                  return String(i);
+                }),
+              renderItem: (function (param) {
+                  var item = param.item;
+                  return React.createElement(ReactNative.View, {
+                              children: null
+                            }, React.createElement(ReactNative.Text, {
+                                  children: item.uid
+                                }), React.createElement(ReactNative.Text, {
+                                  children: item.rssi.toString()
+                                }), React.createElement(ReactNative.Text, {
+                                  children: item.txPower.toString()
+                                }));
+                })
+            });
+}
+
+var BeaconList = {
+  make: App$BeaconScanner$BeaconList
+};
+
+function App$BeaconScanner(Props) {
+  var match = useScanner(undefined);
+  var setScanning = match[2];
+  return React.createElement(ReactNative.View, {
+              style: styles.sectionContainer,
+              children: null
+            }, React.createElement(App$BeaconScanner$BeaconList, {
+                  data: match[0].beacons
+                }), React.createElement(ReactNative.Button, {
+                  onPress: (function (param) {
+                      return Curry._1(setScanning, (function (s) {
+                                    return !s;
+                                  }));
+                    }),
+                  title: match[1] ? "Stop" : "Start"
+                }));
+}
+
+var BeaconScanner = {
+  useScanner: useScanner,
+  BeaconList: BeaconList,
+  make: App$BeaconScanner
+};
+
 function App$Greeting(Props) {
   var name = Props.name;
   var match = React.useState(function () {
@@ -178,14 +270,6 @@ var Movies = {
 };
 
 function App$app(Props) {
-  var logger = function (url) {
-    console.log(url.url);
-    
-  };
-  ReactNativeEddystone.default.addListener("onURLFrame", logger);
-  ReactNativeEddystone.default.startScanning();
-  ReactNativeEddystone.default.stopScanning();
-  ReactNativeEddystone.default.removeListener("onURLFrame", logger);
   return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.StatusBar, {
                   barStyle: "dark-content"
                 }), React.createElement(ReactNative.SafeAreaView, {
@@ -202,7 +286,7 @@ function App$app(Props) {
                             }), React.createElement(NewAppScreen.Header, {}), React.createElement(ReactNative.View, {
                             style: styles.body,
                             children: null
-                          }, React.createElement(App$Movies, {}), React.createElement(App$Greeting, {
+                          }, React.createElement(App$BeaconScanner, {}), React.createElement(App$Movies, {}), React.createElement(App$Greeting, {
                                 name: "pm5"
                               }), React.createElement(ReactNative.View, {
                                 style: styles.sectionContainer,
@@ -287,6 +371,7 @@ export {
   LearnMoreLinks ,
   DebugInstructions ,
   styles ,
+  BeaconScanner ,
   Greeting ,
   Movies ,
   app ,
