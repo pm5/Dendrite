@@ -98,31 +98,6 @@ module Greeting = {
   }
 }
 
-module LotsOfGreetings = {
-  type t = { name : string }
-
-  @react.component
-  let make = () => {
-    <FlatList
-      data={[
-        { name: "Devin" },
-        { name: "Dan" },
-        { name: "Dominic" },
-        { name: "Jackson" },
-        { name: "James" },
-        { name: "Joel" },
-        { name: "Jane" },
-        { name: "John" },
-        { name: "Jillion" },
-        ]}
-      renderItem={({item}) =>
-        <Greeting name={item.name} />
-      }
-      keyExtractor={(item, _) => item.name}
-      />
-  }
-}
-
 module Movies = {
   type movie = {
     id : string,

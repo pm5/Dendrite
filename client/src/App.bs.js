@@ -95,52 +95,6 @@ var Greeting = {
   make: App$Greeting
 };
 
-function App$LotsOfGreetings(Props) {
-  return React.createElement(ReactNative.FlatList, {
-              data: [
-                {
-                  name: "Devin"
-                },
-                {
-                  name: "Dan"
-                },
-                {
-                  name: "Dominic"
-                },
-                {
-                  name: "Jackson"
-                },
-                {
-                  name: "James"
-                },
-                {
-                  name: "Joel"
-                },
-                {
-                  name: "Jane"
-                },
-                {
-                  name: "John"
-                },
-                {
-                  name: "Jillion"
-                }
-              ],
-              keyExtractor: (function (item, param) {
-                  return item.name;
-                }),
-              renderItem: (function (param) {
-                  return React.createElement(App$Greeting, {
-                              name: param.item.name
-                            });
-                })
-            });
-}
-
-var LotsOfGreetings = {
-  make: App$LotsOfGreetings
-};
-
 function App$Movies(Props) {
   var match = React.useState(function () {
         return 0;
@@ -334,7 +288,6 @@ export {
   DebugInstructions ,
   styles ,
   Greeting ,
-  LotsOfGreetings ,
   Movies ,
   app ,
   
