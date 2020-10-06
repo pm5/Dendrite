@@ -1,6 +1,9 @@
 .merlin
 /lib/
 .bsb.lock
+*.cmi
+*.cmj
+*.cmt
 
 ## Node
 # Logs
