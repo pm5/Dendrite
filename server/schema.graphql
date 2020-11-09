@@ -9,20 +9,20 @@ type Pathogen {
   spreadRatio: Float!
 }
 
-type Vaccine {
-  id: ID!
-  name: String!
-  version: String!
-  generates: Antibody!
-  effectiveAfterSeconds: Float!
-}
-
 type Antibody {
   id: ID!
   name: String!
   version: String!
   bindsTo: [Pathogen!]!
   expiresInSeconds: Float!
+}
+
+type Vaccine {
+  id: ID!
+  name: String!
+  version: String!
+  generates: Antibody!
+  effectiveAfterSeconds: Float!
 }
 
 type Infection {
