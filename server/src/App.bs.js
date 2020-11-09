@@ -3,13 +3,19 @@
 
 var Fs = require("fs");
 var Curry = require("bs-platform/lib/js/curry.js");
+var Dotenv = require("dotenv");
 var GraphQL = require("./GraphQL.bs.js");
 var Js_dict = require("bs-platform/lib/js/js_dict.js");
+var Process = require("process");
 var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
 var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 var Caml_option = require("bs-platform/lib/js/caml_option.js");
 var ApolloServer = require("./ApolloServer.bs.js");
 var ApolloServer$1 = require("apollo-server");
+
+Dotenv.config(undefined);
+
+console.log(Js_dict.get(Process.env, "AIRTABLE_KEY"));
 
 var pathogens = [{
     id: "0",
@@ -170,4 +176,4 @@ exports.schema = schema;
 exports.resolvers = resolvers;
 exports.AppServer = AppServer;
 exports.server = server;
-/* citizens Not a pure module */
+/*  Not a pure module */

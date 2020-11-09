@@ -1,3 +1,7 @@
+Dotenv.config()
+
+Js.log(Node.Process.process["env"]->Js.Dict.get("AIRTABLE_KEY"))
+
 @bs.module("fs")
 external readFileSync : string => string => string = "readFileSync"
 
