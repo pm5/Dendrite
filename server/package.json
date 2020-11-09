@@ -14,11 +14,14 @@
   "license": "MIT",
   "devDependencies": {
     "@ahrefs/bs-dotenv": "^2.0.0",
+    "@glennsl/bs-json": "^5.0.2",
+    "bs-fetch": "^0.6.2",
     "bs-platform": "^8.2.0"
   },
   "dependencies": {
     "apollo-server": "^2.17.0",
     "dotenv": "^8.2.0",
-    "graphql": "^15.3.0"
+    "graphql": "^15.3.0",
+    "isomorphic-fetch": "^3.0.0"
   }
 }

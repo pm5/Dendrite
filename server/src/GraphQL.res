@@ -34,6 +34,7 @@ module Vaccine = {
 }
 
 module Infection = {
+  type id = string
   type t = {
     pathogen: Pathogen.id
     infectedAt: Js.Date.t
@@ -41,6 +42,7 @@ module Infection = {
 }
 
 module Vaccination = {
+  type id = string
   type t = {
     vaccine: Vaccine.id
     adminedAt: Js.Date.t
@@ -48,6 +50,7 @@ module Vaccination = {
 }
 
 module Immunity = {
+  type id = string
   type t = {
     antibody: Antibody.id
     expiresAt: Js.Date.t
@@ -58,9 +61,9 @@ module Citizen = {
   type id = string
   type t = {
     id: id
-    infections: array<Infection.t>
-    vaccinations: array<Vaccination.t>
-    immunities: array<Immunity.t>
+    infections: array<Infection.id>
+    vaccinations: array<Vaccination.id>
+    immunities: array<Immunity.id>
   }
 }
 
@@ -78,31 +81,31 @@ module Resolvers = {
   type info
   type context
   type vaccineQuery = {
-    generates: Vaccine.t => Antibody.t
+    generates: Vaccine.t => Js.Promise.t<Antibody.t>
   }
   type antibodyQuery = {
-    bindsTo: Antibody.t => array<Pathogen.t>
+    bindsTo: Antibody.t => Js.Promise.t<array<Pathogen.t>>
   }
   type infectionQuery = {
-    pathogen: Infection.t => Pathogen.t
+    pathogen: Infection.t => Js.Promise.t<Pathogen.t>
   }
   type vaccinationQuery = {
-    vaccine: Vaccination.t =>  Vaccine.t
+    vaccine: Vaccination.t =>  Js.Promise.t<Vaccine.t>
   }
   type immunityQuery = {
-    antibody: Immunity.t => Antibody.t
+    antibody: Immunity.t => Js.Promise.t<Antibody.t>
   }
   type citizeQuery = {
-    infections: Citizen.t => array<Infection.t>
-    vaccinations: Citizen.t => array<Vaccination.t>
-    immunities: Citizen.t => array<Immunity.t>
+    infections: Citizen.t => Js.Promise.t<array<Infection.t>>
+    vaccinations: Citizen.t => Js.Promise.t<array<Vaccination.t>>
+    immunities: Citizen.t => Js.Promise.t<array<Immunity.t>>
   }
   type query = {
-      allCitizens: (obj, args, info, context) => array<Citizen.t>
-      allPathogens: (obj, args, info, context) => array<Pathogen.t>
-      allVaccines: (obj, args, info, context) => array<Vaccine.t>
-      allAntibodies: (obj, args, info, context) => array<Antibody.t>
-      citizen: (obj, args, info, context) => option<Citizen.t>
+      allCitizens: (obj, args, info, context) => Js.Promise.t<array<Citizen.t>>
+      allPathogens: (obj, args, info, context) => Js.Promise.t<array<Pathogen.t>>
+      allVaccines: (obj, args, info, context) => Js.Promise.t<array<Vaccine.t>>
+      allAntibodies: (obj, args, info, context) => Js.Promise.t<array<Antibody.t>>
+      citizen: (obj, args, info, context) => Js.Promise.t<Citizen.t>
   }
   type t = {
     @bs.as("Query") query: query
