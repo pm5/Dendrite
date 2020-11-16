@@ -1,2 +1,2 @@
 cd server
-npm install && npm build
+npm install && npm run build
