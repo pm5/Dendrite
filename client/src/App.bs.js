@@ -2,55 +2,14 @@
 
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
-import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
 import * as ReactNative from "react-native";
-import * as ReactNativeEddystone from "@lg2/react-native-eddystone";
-import * as NewAppScreen from "react-native/Libraries/NewAppScreen";
 
-var Header = {};
-
-var styles = ReactNative.StyleSheet.create({
-      scrollView: {
-        backgroundColor: NewAppScreen.Colors.lighter
-      },
-      engine: {
-        position: "absolute",
-        right: 0
-      },
-      body: {
-        backgroundColor: NewAppScreen.Colors.white
-      },
-      sectionContainer: {
-        marginTop: 32,
-        paddingHorizontal: 24
-      },
-      sectionTitle: {
-        color: NewAppScreen.Colors.black,
-        fontSize: 24,
-        fontWeight: "600"
-      },
-      sectionDescription: {
-        color: NewAppScreen.Colors.dark,
-        fontSize: 18,
-        fontWeight: "400",
-        marginTop: 8
-      },
-      highlight: {
-        fontWeight: "700"
-      },
-      footer: {
-        color: NewAppScreen.Colors.dark,
-        fontSize: 12,
-        fontWeight: "600",
-        textAlign: "right",
-        padding: 4,
-        paddingRight: 12
-      }
-    });
-
-var State = {};
-
-var stateContext = React.createContext(/* AppStart */0);
+var stateContext = React.createContext([
+      /* Start */0,
+      (function (param) {
+          
+        })
+    ]);
 
 function makeProps(value, children, param) {
   return {
@@ -67,128 +26,63 @@ var StateProvider = {
   make: make
 };
 
-function useScanner(param) {
-  var match = React.useState(function () {
-        return false;
-      });
-  var scanning = match[0];
-  var match$1 = React.useState(function () {
-        return {
-                beacons: [{
-                    id: "0",
-                    uid: "0x00",
-                    rssi: 0.1,
-                    txPower: 0.01
-                  }]
-              };
-      });
-  var setBeacons = match$1[1];
-  var beaconListener = function (d) {
-    console.log("wooty");
-    return Curry._1(setBeacons, (function (beacons) {
-                  return {
-                          beacons: [d].concat(beacons.beacons).slice(0, 10)
-                        };
+function App$StartScreen(Props) {
+  return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
+                  children: React.createElement(ReactNative.Text, {
+                        children: "Start Screen"
+                      })
                 }));
-  };
-  React.useEffect((function () {
-          console.log("woot");
-          ReactNativeEddystone.default.addListener("onUIDFrame", beaconListener);
-          ReactNativeEddystone.default.startScanning();
-          return (function (param) {
-                    ReactNativeEddystone.default.stopScanning();
-                    ReactNativeEddystone.default.removeListener("onUIDFrame", beaconListener);
-                    console.log("uoot");
-                    
-                  });
-        }), [scanning]);
-  return [
-          match$1[0],
-          scanning,
-          match[1]
-        ];
 }
 
-function App$BeaconScanner$BeaconList(Props) {
-  var data = Props.data;
-  return React.createElement(ReactNative.FlatList, {
-              data: data,
-              keyExtractor: (function (param, i) {
-                  return String(i);
-                }),
-              renderItem: (function (param) {
-                  var item = param.item;
-                  return React.createElement(ReactNative.View, {
-                              children: null
-                            }, React.createElement(ReactNative.Text, {
-                                  children: item.uid
-                                }), React.createElement(ReactNative.Text, {
-                                  children: item.rssi.toString()
-                                }), React.createElement(ReactNative.Text, {
-                                  children: item.txPower.toString()
-                                }));
-                })
-            });
-}
-
-var BeaconList = {
-  make: App$BeaconScanner$BeaconList
+var StartScreen = {
+  make: App$StartScreen
 };
 
-function App$BeaconScanner(Props) {
-  var match = useScanner(undefined);
-  var setScanning = match[2];
-  return React.createElement(ReactNative.View, {
-              style: styles.sectionContainer,
-              children: null
-            }, React.createElement(App$BeaconScanner$BeaconList, {
-                  data: match[0].beacons
-                }), React.createElement(ReactNative.Button, {
-                  onPress: (function (param) {
-                      return Curry._1(setScanning, (function (s) {
-                                    return !s;
-                                  }));
-                    }),
-                  title: match[1] ? "Stop" : "Start"
+function App$Monitor(Props) {
+  return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
+                  children: React.createElement(ReactNative.Text, {
+                        children: "Monitor"
+                      })
                 }));
 }
 
-var BeaconScanner = {
-  useScanner: useScanner,
-  BeaconList: BeaconList,
-  make: App$BeaconScanner
+var Monitor = {
+  make: App$Monitor
+};
+
+function App$AppView(Props) {
+  var match = React.useContext(stateContext);
+  return React.createElement(React.Fragment, undefined, match[0] !== 0 ? React.createElement(App$Monitor, {}) : React.createElement(App$StartScreen, {}));
+}
+
+var AppView = {
+  make: App$AppView
 };
 
 function App$app(Props) {
-  return React.createElement(React.Fragment, undefined, React.createElement(make, makeProps(/* AppStart */0, null, undefined), React.createElement(ReactNative.StatusBar, {
-                      barStyle: "dark-content"
-                    }), React.createElement(ReactNative.SafeAreaView, {
-                      children: React.createElement(ReactNative.ScrollView, {
-                            contentInsetAdjustmentBehavior: "automatic",
-                            style: styles.scrollView,
-                            children: null
-                          }, Belt_Option.isNone(global.HermesInternal) ? null : React.createElement(ReactNative.View, {
-                                  style: styles.engine,
-                                  children: React.createElement(ReactNative.Text, {
-                                        style: styles.footer,
-                                        children: "Engine: Hermes"
-                                      })
-                                }), React.createElement(NewAppScreen.Header, {}), React.createElement(ReactNative.View, {
-                                style: styles.body,
-                                children: React.createElement(App$BeaconScanner, {})
-                              }))
-                    })));
+  var match = React.useState(function () {
+        return /* Start */0;
+      });
+  var setAppState = match[1];
+  var setState = function (state) {
+    return Curry._1(setAppState, (function (param) {
+                  return state;
+                }));
+  };
+  return React.createElement(React.Fragment, undefined, React.createElement(make, makeProps([
+                      match[0],
+                      setState
+                    ], React.createElement(App$AppView, {}), undefined)));
 }
 
 var app = App$app;
 
 export {
-  Header ,
-  styles ,
-  State ,
   StateProvider ,
-  BeaconScanner ,
+  StartScreen ,
+  Monitor ,
+  AppView ,
   app ,
   
 }
-/* styles Not a pure module */
+/* stateContext Not a pure module */
