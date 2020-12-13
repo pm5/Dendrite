@@ -2,7 +2,7 @@ type t =
   | Start
 
   | ScanningBeacon
-  | BeaconPaired
+  | BeaconPaired(Beacon.t)
   | BeaconUnpaired
 
   | NoUserStored
@@ -19,7 +19,7 @@ type t =
 
 type action =
   | PairBeacon
-  | SaveBeacon
+  | SaveBeacon(Beacon.t)
   | ConfirmBeaconSaved
 
 let stateContext = React.createContext((Start, (_: t => t) => ()))
@@ -36,7 +36,7 @@ let useContext = () => React.useContext(stateContext)
 let take = (action, currentState) =>
   switch (action, currentState) {
     | (PairBeacon, Start) => ScanningBeacon
-    | (SaveBeacon, ScanningBeacon) => BeaconPaired
-    | (ConfirmBeaconSaved, BeaconPaired) => Start
+    | (SaveBeacon(beacon), ScanningBeacon) => BeaconPaired(beacon)
+    | (ConfirmBeaconSaved, BeaconPaired(_)) => Start
     | _ => failwith("Invalid action at current state")
   }

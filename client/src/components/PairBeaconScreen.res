@@ -23,7 +23,7 @@ let make = () => {
   let saveBeacon = beacon => {
     open Async
     Storage.saveBeacon(beacon)
-      ->then_(() => setAppState(StateProvider.take(SaveBeacon))->async)
+      ->then_(() => setAppState(StateProvider.take(SaveBeacon(beacon)))->async)
   }
 
   let confirmSaved = () => setAppState(StateProvider.take(ConfirmBeaconSaved))
@@ -32,17 +32,20 @@ let make = () => {
     <View>
       <Text>{"Pairing beacon"->React.string}</Text>
       {
-        if appState == StateProvider.ScanningBeacon && selected->Option.isSome {
-          <View>
-            <Button title="Yes" onPress={_ => selected->Option.map(saveBeacon) |> ignore} />
-            <Button title="No" onPress={_ => setSelected(_ => None)} />
-          </View>
-        } else if appState == StateProvider.BeaconPaired {
-          <View>
-            <Button title="Proceed" onPress={_ => confirmSaved()} />
-          </View>
-        } else {
-          React.null
+        switch appState {
+          | StateProvider.ScanningBeacon when selected->Option.isSome => {
+            <View>
+              <Button title="Yes" onPress={_ => selected->Option.map(saveBeacon) |> ignore} />
+              <Button title="No" onPress={_ => setSelected(_ => None)} />
+            </View>
+          }
+          | StateProvider.BeaconPaired(beacon) => {
+            <View>
+              <Text>{("Paired with " ++ beacon.id)->React.string}</Text>
+              <Button title="Proceed" onPress={_ => confirmSaved()} />
+            </View>
+          }
+          | _ => React.null
         }
       }
       <FlatList

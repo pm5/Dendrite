@@ -134,7 +134,7 @@ module AppView = {
     <>
       {switch state {
         | Start => <StartScreen />
-        | ScanningBeacon | BeaconPaired | BeaconUnpaired => <PairBeaconScreen />
+        | ScanningBeacon | BeaconPaired(_) | BeaconUnpaired => <PairBeaconScreen />
         | NoUserStored | DownloadingUser | UserJustStored | ErrorUserInvalid | ErrorUserNotFound => <LoadUserScreen />
         | Initializing | Monitoring | NearbyUserDetected | QueryingUser => <MonitorScreen />
         | WarningUser => <WarnScreen />

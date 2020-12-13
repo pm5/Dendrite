@@ -24,26 +24,24 @@ function useContext(param) {
 }
 
 function take(action, currentState) {
-  switch (action) {
-    case /* PairBeacon */0 :
-        if (currentState !== 0) {
-          return Pervasives.failwith("Invalid action at current state");
-        } else {
-          return /* ScanningBeacon */1;
-        }
-    case /* SaveBeacon */1 :
-        if (currentState !== 1) {
-          return Pervasives.failwith("Invalid action at current state");
-        } else {
-          return /* BeaconPaired */2;
-        }
-    case /* ConfirmBeaconSaved */2 :
-        if (currentState !== 2) {
-          return Pervasives.failwith("Invalid action at current state");
-        } else {
-          return /* Start */0;
-        }
-    
+  if (typeof action === "number") {
+    if (action !== 0) {
+      if (typeof currentState === "number") {
+        return Pervasives.failwith("Invalid action at current state");
+      } else {
+        return /* Start */0;
+      }
+    } else if (typeof currentState === "number" && currentState === 0) {
+      return /* ScanningBeacon */1;
+    } else {
+      return Pervasives.failwith("Invalid action at current state");
+    }
+  } else if (typeof currentState === "number" && currentState === 1) {
+    return /* BeaconPaired */{
+            _0: action._0
+          };
+  } else {
+    return Pervasives.failwith("Invalid action at current state");
   }
 }
 
