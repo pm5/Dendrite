@@ -2,7 +2,7 @@ open ReactNative
 
 @react.component
 let make = (~beacon) => {
-  let (appState, setAppState) = StateProvider.useContext()
+  let (_, setAppState) = StateProvider.useContext()
   React.useEffect0(() => {
     open Async
     // XXX for tests

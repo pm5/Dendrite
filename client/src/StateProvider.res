@@ -8,7 +8,6 @@ type t =
 
   | LoadingUser(Beacon.t)
 
-  | Initializing
   | Monitoring(Beacon.t, User.t)
   | NearbyUserDetected
   | QueryingUser
