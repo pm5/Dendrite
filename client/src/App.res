@@ -18,8 +18,8 @@ module StartScreen = {
           title="No beacon paired"
           />
         <Button
-          onPress={_ => setAppState(_ => StateProvider.NoUserStored)}
-          title="No user data"
+          onPress={_ => setAppState(StateProvider.take(StateProvider.LoadUser))}
+          title="No user"
           />
         <Button
           onPress={_ => setAppState(_ => StateProvider.Initializing)}
@@ -34,67 +34,10 @@ module StartScreen = {
   }
 }
 
-module LoadUserScreen = {
-  @react.component
-  let make = () => {
-    let (appState, setAppState) = React.useContext(StateProvider.stateContext)
-    React.useEffect1(() =>
-      switch (appState) {
-        | StateProvider.NoUserStored => {
-          setAppState(_ => StateProvider.DownloadingUser)
-          None
-        }
-        | StateProvider.DownloadingUser => {
-          setAppState(_ => StateProvider.UserJustStored)
-          None
-        }
-        | StateProvider.UserJustStored => {
-          setAppState(_ => StateProvider.Start)
-          None
-        }
-        | StateProvider.ErrorUserInvalid => {
-          setAppState(_ => StateProvider.BeaconUnpaired)
-          None
-        }
-        | StateProvider.ErrorUserNotFound => {
-          setAppState(_ => StateProvider.BeaconUnpaired)
-          None
-        }
-        | _ => None
-      },
-      [appState])
-    <>
-      <View>
-        <Text>{"Loading user data"->React.string}</Text>
-      </View>
-    </>
-  }
-}
-
 module MonitorScreen = {
   @react.component
-  let make = () => {
+  let make = (~beacon as _, ~user as _) => {
     let (appState, setAppState) = React.useContext(StateProvider.stateContext)
-    React.useEffect1(() =>
-      switch (appState) {
-        | StateProvider.Initializing => {
-          setAppState(_ => StateProvider.Monitoring)
-          None
-        }
-        | StateProvider.Monitoring => {
-          None
-        }
-        | StateProvider.NearbyUserDetected => {
-          setAppState(_ => StateProvider.QueryingUser)
-          None
-        }
-        | StateProvider.QueryingUser => {
-          setAppState(_ => StateProvider.Monitoring)
-          None
-        }
-        | _ => None
-      },
-      [appState])
     <>
       <View>
         <Text>{"Monitor"->React.string}</Text>
@@ -118,10 +61,6 @@ module WarnScreen = {
     <>
       <View>
         <Text>{"Warning!"->React.string}</Text>
-        <Button
-          onPress={_ => setAppState(_ => StateProvider.Monitoring)}
-          title="No danger anymore"
-          />
       </View>
     </>
   }
@@ -134,9 +73,9 @@ module AppView = {
     <>
       {switch state {
         | Start => <StartScreen />
-        | ScanningBeacon | BeaconPaired(_) | BeaconUnpaired => <PairBeaconScreen />
-        | NoUserStored | DownloadingUser | UserJustStored | ErrorUserInvalid | ErrorUserNotFound => <LoadUserScreen />
-        | Initializing | Monitoring | NearbyUserDetected | QueryingUser => <MonitorScreen />
+        | ScanningBeacon | BeaconSaved(_) | BeaconPaired(_) => <PairBeaconScreen />
+        | LoadingUser(beacon) | UserLoaded(beacon, _) => <LoadUserScreen beacon=beacon />
+        | Monitoring(beacon, user) => <MonitorScreen beacon=beacon user=user />
         | WarningUser => <WarnScreen />
       }}
     </>
@@ -146,12 +85,23 @@ module AppView = {
 @react.component
 let app = () => {
   let (appState, setAppState) = React.useState(() => StateProvider.Start)
+
   {
     open Async
     Storage.loadBeacon()
       ->then_(b => b->Option.map(beacon => Js.log(beacon.id))->async)
       |> ignore
   }
+
+  React.useEffect1(() => {
+    switch appState {
+      | BeaconPaired(_) => setAppState(StateProvider.take(StateProvider.LoadUser))
+      | UserLoaded(_, _) => setAppState(StateProvider.take(StateProvider.StartMonitor))
+      | _ => ()
+    }
+    None
+  }, [appState])
+
   <>
     <StateProvider value=(appState, setAppState)>
       <AppView />

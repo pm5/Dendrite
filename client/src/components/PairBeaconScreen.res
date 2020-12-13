@@ -16,7 +16,7 @@ let make = () => {
         { Beacon.id: "678" },
         { Beacon.id: "abc" },
       ])
-    }, 4000)
+    }, 2000)
     None
   })
 
@@ -35,11 +35,12 @@ let make = () => {
         switch appState {
           | StateProvider.ScanningBeacon when selected->Option.isSome => {
             <View>
+              <Text>{("Going to pair with " ++ selected->Option.map(beacon => beacon.id)->Option.getWithDefault(""))->React.string}</Text>
               <Button title="Yes" onPress={_ => selected->Option.map(saveBeacon) |> ignore} />
               <Button title="No" onPress={_ => setSelected(_ => None)} />
             </View>
           }
-          | StateProvider.BeaconPaired(beacon) => {
+          | StateProvider.BeaconSaved(beacon) => {
             <View>
               <Text>{("Paired with " ++ beacon.id)->React.string}</Text>
               <Button title="Proceed" onPress={_ => confirmSaved()} />

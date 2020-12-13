@@ -1,18 +1,15 @@
 type t =
   | Start
+  | BeaconPaired(Beacon.t)
+  | UserLoaded(Beacon.t, User.t)
 
   | ScanningBeacon
-  | BeaconPaired(Beacon.t)
-  | BeaconUnpaired
+  | BeaconSaved(Beacon.t)
 
-  | NoUserStored
-  | DownloadingUser
-  | ErrorUserNotFound
-  | ErrorUserInvalid
-  | UserJustStored
+  | LoadingUser(Beacon.t)
 
   | Initializing
-  | Monitoring
+  | Monitoring(Beacon.t, User.t)
   | NearbyUserDetected
   | QueryingUser
   | WarningUser
@@ -21,6 +18,9 @@ type action =
   | PairBeacon
   | SaveBeacon(Beacon.t)
   | ConfirmBeaconSaved
+  | LoadUser
+  | SaveUser(User.t)
+  | StartMonitor
 
 let stateContext = React.createContext((Start, (_: t => t) => ()))
 
@@ -36,7 +36,10 @@ let useContext = () => React.useContext(stateContext)
 let take = (action, currentState) =>
   switch (action, currentState) {
     | (PairBeacon, Start) => ScanningBeacon
-    | (SaveBeacon(beacon), ScanningBeacon) => BeaconPaired(beacon)
-    | (ConfirmBeaconSaved, BeaconPaired(_)) => Start
+    | (SaveBeacon(beacon), ScanningBeacon) => BeaconSaved(beacon)
+    | (ConfirmBeaconSaved, BeaconSaved(beacon)) => BeaconPaired(beacon)
+    | (LoadUser, BeaconPaired(beacon)) => LoadingUser(beacon)
+    | (SaveUser(user), LoadingUser(beacon)) => UserLoaded(beacon, user)
+    | (StartMonitor, UserLoaded(beacon, user)) => Monitoring(beacon, user)
     | _ => failwith("Invalid action at current state")
   }

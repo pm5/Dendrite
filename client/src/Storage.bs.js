@@ -19,9 +19,25 @@ function loadBeacon(param) {
               }));
 }
 
+function saveUser(user) {
+  return AsyncStorage.default.setItem("user_id", user.id);
+}
+
+function loadUser(param) {
+  return Async.then_(AsyncStorage.default.getItem("user_id"), (function (idOrNull) {
+                return Async.async(Belt_Option.map(idOrNull === null ? undefined : Caml_option.some(idOrNull), (function (id) {
+                                  return {
+                                          id: id
+                                        };
+                                })));
+              }));
+}
+
 export {
   saveBeacon ,
   loadBeacon ,
+  saveUser ,
+  loadUser ,
   
 }
 /* @react-native-community/async-storage Not a pure module */

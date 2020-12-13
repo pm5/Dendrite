@@ -24,24 +24,62 @@ function useContext(param) {
 }
 
 function take(action, currentState) {
-  if (typeof action === "number") {
-    if (action !== 0) {
-      if (typeof currentState === "number") {
-        return Pervasives.failwith("Invalid action at current state");
+  if (typeof action !== "number") {
+    if (action.TAG === /* SaveBeacon */0) {
+      if (typeof currentState === "number" && currentState === 1) {
+        return {
+                TAG: /* BeaconSaved */2,
+                _0: action._0
+              };
       } else {
-        return /* Start */0;
+        return Pervasives.failwith("Invalid action at current state");
       }
-    } else if (typeof currentState === "number" && currentState === 0) {
-      return /* ScanningBeacon */1;
-    } else {
+    } else if (typeof currentState === "number" || currentState.TAG !== /* LoadingUser */3) {
       return Pervasives.failwith("Invalid action at current state");
+    } else {
+      return {
+              TAG: /* UserLoaded */1,
+              _0: currentState._0,
+              _1: action._0
+            };
     }
-  } else if (typeof currentState === "number" && currentState === 1) {
-    return /* BeaconPaired */{
-            _0: action._0
-          };
-  } else {
-    return Pervasives.failwith("Invalid action at current state");
+  }
+  switch (action) {
+    case /* PairBeacon */0 :
+        if (typeof currentState === "number" && currentState === 0) {
+          return /* ScanningBeacon */1;
+        } else {
+          return Pervasives.failwith("Invalid action at current state");
+        }
+    case /* ConfirmBeaconSaved */1 :
+        if (typeof currentState === "number" || currentState.TAG !== /* BeaconSaved */2) {
+          return Pervasives.failwith("Invalid action at current state");
+        } else {
+          return {
+                  TAG: /* BeaconPaired */0,
+                  _0: currentState._0
+                };
+        }
+    case /* LoadUser */2 :
+        if (typeof currentState === "number" || currentState.TAG !== /* BeaconPaired */0) {
+          return Pervasives.failwith("Invalid action at current state");
+        } else {
+          return {
+                  TAG: /* LoadingUser */3,
+                  _0: currentState._0
+                };
+        }
+    case /* StartMonitor */3 :
+        if (typeof currentState === "number" || currentState.TAG !== /* UserLoaded */1) {
+          return Pervasives.failwith("Invalid action at current state");
+        } else {
+          return {
+                  TAG: /* Monitoring */4,
+                  _0: currentState._0,
+                  _1: currentState._1
+                };
+        }
+    
   }
 }
 

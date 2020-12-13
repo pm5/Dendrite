@@ -7,6 +7,7 @@ import * as $$Storage from "./Storage.bs.js";
 import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
 import * as ReactNative from "react-native";
 import * as StateProvider from "./StateProvider.bs.js";
+import * as LoadUserScreen from "./components/LoadUserScreen.bs.js";
 import * as PairBeaconScreen from "./components/PairBeaconScreen.bs.js";
 
 function App$StartScreen(Props) {
@@ -26,14 +27,14 @@ function App$StartScreen(Props) {
                     }), React.createElement(ReactNative.Button, {
                       onPress: (function (param) {
                           return Curry._1(setAppState, (function (param) {
-                                        return /* NoUserStored */3;
+                                        return StateProvider.take(/* LoadUser */2, param);
                                       }));
                         }),
-                      title: "No user data"
+                      title: "No user"
                     }), React.createElement(ReactNative.Button, {
                       onPress: (function (param) {
                           return Curry._1(setAppState, (function (param) {
-                                        return /* Initializing */8;
+                                        return /* Initializing */2;
                                       }));
                         }),
                       title: "All good to go"
@@ -49,101 +50,9 @@ var StartScreen = {
   make: App$StartScreen
 };
 
-function App$LoadUserScreen(Props) {
-  var match = React.useContext(StateProvider.stateContext);
-  var setAppState = match[1];
-  var appState = match[0];
-  React.useEffect((function () {
-          if (typeof appState !== "number") {
-            return ;
-          }
-          switch (appState) {
-            case /* NoUserStored */3 :
-                Curry._1(setAppState, (function (param) {
-                        return /* DownloadingUser */4;
-                      }));
-                return ;
-            case /* DownloadingUser */4 :
-                Curry._1(setAppState, (function (param) {
-                        return /* UserJustStored */7;
-                      }));
-                return ;
-            case /* ErrorUserNotFound */5 :
-                Curry._1(setAppState, (function (param) {
-                        return /* BeaconUnpaired */2;
-                      }));
-                return ;
-            case /* ErrorUserInvalid */6 :
-                Curry._1(setAppState, (function (param) {
-                        return /* BeaconUnpaired */2;
-                      }));
-                return ;
-            case /* UserJustStored */7 :
-                Curry._1(setAppState, (function (param) {
-                        return /* Start */0;
-                      }));
-                return ;
-            case /* Start */0 :
-            case /* ScanningBeacon */1 :
-            case /* BeaconUnpaired */2 :
-            case /* Initializing */8 :
-            case /* Monitoring */9 :
-            case /* NearbyUserDetected */10 :
-            case /* QueryingUser */11 :
-            case /* WarningUser */12 :
-                return ;
-            
-          }
-        }), [appState]);
-  return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
-                  children: React.createElement(ReactNative.Text, {
-                        children: "Loading user data"
-                      })
-                }));
-}
-
-var LoadUserScreen = {
-  make: App$LoadUserScreen
-};
-
 function App$MonitorScreen(Props) {
   var match = React.useContext(StateProvider.stateContext);
   var setAppState = match[1];
-  var appState = match[0];
-  React.useEffect((function () {
-          if (typeof appState !== "number") {
-            return ;
-          }
-          switch (appState) {
-            case /* Initializing */8 :
-                Curry._1(setAppState, (function (param) {
-                        return /* Monitoring */9;
-                      }));
-                return ;
-            case /* NearbyUserDetected */10 :
-                Curry._1(setAppState, (function (param) {
-                        return /* QueryingUser */11;
-                      }));
-                return ;
-            case /* QueryingUser */11 :
-                Curry._1(setAppState, (function (param) {
-                        return /* Monitoring */9;
-                      }));
-                return ;
-            case /* Start */0 :
-            case /* ScanningBeacon */1 :
-            case /* BeaconUnpaired */2 :
-            case /* NoUserStored */3 :
-            case /* DownloadingUser */4 :
-            case /* ErrorUserNotFound */5 :
-            case /* ErrorUserInvalid */6 :
-            case /* UserJustStored */7 :
-            case /* Monitoring */9 :
-            case /* WarningUser */12 :
-                return ;
-            
-          }
-        }), [appState]);
   return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
                   children: null
                 }, React.createElement(ReactNative.Text, {
@@ -151,14 +60,14 @@ function App$MonitorScreen(Props) {
                     }), React.createElement(ReactNative.Button, {
                       onPress: (function (param) {
                           return Curry._1(setAppState, (function (param) {
-                                        return /* NearbyUserDetected */10;
+                                        return /* NearbyUserDetected */3;
                                       }));
                         }),
                       title: "Nearby found"
                     }), React.createElement(ReactNative.Button, {
                       onPress: (function (param) {
                           return Curry._1(setAppState, (function (param) {
-                                        return /* WarningUser */12;
+                                        return /* WarningUser */5;
                                       }));
                         }),
                       title: "Danger found"
@@ -170,20 +79,12 @@ var MonitorScreen = {
 };
 
 function App$WarnScreen(Props) {
-  var match = React.useContext(StateProvider.stateContext);
-  var setAppState = match[1];
+  React.useContext(StateProvider.stateContext);
   return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
-                  children: null
-                }, React.createElement(ReactNative.Text, {
-                      children: "Warning!"
-                    }), React.createElement(ReactNative.Button, {
-                      onPress: (function (param) {
-                          return Curry._1(setAppState, (function (param) {
-                                        return /* Monitoring */9;
-                                      }));
-                        }),
-                      title: "No danger anymore"
-                    })));
+                  children: React.createElement(ReactNative.Text, {
+                        children: "Warning!"
+                      })
+                }));
 }
 
 var WarnScreen = {
@@ -201,39 +102,49 @@ function App$AppView(Props) {
           tmp = React.createElement(App$StartScreen, {});
           break;
       case /* ScanningBeacon */1 :
-      case /* BeaconUnpaired */2 :
-          exit = 1;
-          break;
-      case /* NoUserStored */3 :
-      case /* DownloadingUser */4 :
-      case /* ErrorUserNotFound */5 :
-      case /* ErrorUserInvalid */6 :
-      case /* UserJustStored */7 :
           exit = 2;
           break;
-      case /* Initializing */8 :
-      case /* Monitoring */9 :
-      case /* NearbyUserDetected */10 :
-      case /* QueryingUser */11 :
-          exit = 3;
-          break;
-      case /* WarningUser */12 :
+      case /* WarningUser */5 :
           tmp = React.createElement(App$WarnScreen, {});
+          break;
+      default:
+        throw {
+              RE_EXN_ID: "Match_failure",
+              _1: [
+                "App.res",
+                74,
+                7
+              ],
+              Error: new Error()
+            };
+    }
+  } else {
+    switch (state.TAG | 0) {
+      case /* BeaconPaired */0 :
+      case /* BeaconSaved */2 :
+          exit = 2;
+          break;
+      case /* UserLoaded */1 :
+      case /* LoadingUser */3 :
+          exit = 1;
+          break;
+      case /* Monitoring */4 :
+          tmp = React.createElement(App$MonitorScreen, {
+                beacon: state._0,
+                user: state._1
+              });
           break;
       
     }
-  } else {
-    exit = 1;
   }
   switch (exit) {
     case 1 :
-        tmp = React.createElement(PairBeaconScreen.make, {});
+        tmp = React.createElement(LoadUserScreen.make, {
+              beacon: state._0
+            });
         break;
     case 2 :
-        tmp = React.createElement(App$LoadUserScreen, {});
-        break;
-    case 3 :
-        tmp = React.createElement(App$MonitorScreen, {});
+        tmp = React.createElement(PairBeaconScreen.make, {});
         break;
     
   }
@@ -248,15 +159,36 @@ function App$app(Props) {
   var match = React.useState(function () {
         return /* Start */0;
       });
+  var setAppState = match[1];
+  var appState = match[0];
   Async.then_($$Storage.loadBeacon(undefined), (function (b) {
           return Async.async(Belt_Option.map(b, (function (beacon) {
                             console.log(beacon.id);
                             
                           })));
         }));
+  React.useEffect((function () {
+          if (typeof appState !== "number") {
+            switch (appState.TAG | 0) {
+              case /* BeaconPaired */0 :
+                  Curry._1(setAppState, (function (param) {
+                          return StateProvider.take(/* LoadUser */2, param);
+                        }));
+                  break;
+              case /* UserLoaded */1 :
+                  Curry._1(setAppState, (function (param) {
+                          return StateProvider.take(/* StartMonitor */3, param);
+                        }));
+                  break;
+              default:
+                
+            }
+          }
+          
+        }), [appState]);
   return React.createElement(React.Fragment, undefined, React.createElement(StateProvider.make, StateProvider.makeProps([
-                      match[0],
-                      match[1]
+                      appState,
+                      setAppState
                     ], React.createElement(App$AppView, {}), undefined)));
 }
 
@@ -264,7 +196,6 @@ var app = App$app;
 
 export {
   StartScreen ,
-  LoadUserScreen ,
   MonitorScreen ,
   WarnScreen ,
   AppView ,

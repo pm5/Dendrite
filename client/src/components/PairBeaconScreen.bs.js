@@ -39,12 +39,13 @@ function PairBeaconScreen(Props) {
                                         }
                                       ];
                               }));
-                }), 4000);
+                }), 2000);
           
         }), []);
   var saveBeacon = function (beacon) {
     return Async.then_($$Storage.saveBeacon(beacon), (function (param) {
-                  var partial_arg = /* SaveBeacon */{
+                  var partial_arg = {
+                    TAG: /* SaveBeacon */0,
                     _0: beacon
                   };
                   return Async.async(Curry._1(setAppState, (function (param) {
@@ -52,39 +53,47 @@ function PairBeaconScreen(Props) {
                                   })));
                 }));
   };
+  var tmp;
+  tmp = typeof appState === "number" ? (
+      appState === /* ScanningBeacon */1 && Belt_Option.isSome(selected) ? React.createElement(ReactNative.View, {
+              children: null
+            }, React.createElement(ReactNative.Text, {
+                  children: "Going to pair with " + Belt_Option.getWithDefault(Belt_Option.map(selected, (function (beacon) {
+                              return beacon.id;
+                            })), "")
+                }), React.createElement(ReactNative.Button, {
+                  onPress: (function (param) {
+                      Belt_Option.map(selected, saveBeacon);
+                      
+                    }),
+                  title: "Yes"
+                }), React.createElement(ReactNative.Button, {
+                  onPress: (function (param) {
+                      return Curry._1(setSelected, (function (param) {
+                                    
+                                  }));
+                    }),
+                  title: "No"
+                })) : null
+    ) : (
+      appState.TAG === /* BeaconSaved */2 ? React.createElement(ReactNative.View, {
+              children: null
+            }, React.createElement(ReactNative.Text, {
+                  children: "Paired with " + appState._0.id
+                }), React.createElement(ReactNative.Button, {
+                  onPress: (function (param) {
+                      return Curry._1(setAppState, (function (param) {
+                                    return StateProvider.take(/* ConfirmBeaconSaved */1, param);
+                                  }));
+                    }),
+                  title: "Proceed"
+                })) : null
+    );
   return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
                   children: null
                 }, React.createElement(ReactNative.Text, {
                       children: "Pairing beacon"
-                    }), typeof appState === "number" ? (
-                    appState !== 1 || !Belt_Option.isSome(selected) ? null : React.createElement(ReactNative.View, {
-                            children: null
-                          }, React.createElement(ReactNative.Button, {
-                                onPress: (function (param) {
-                                    Belt_Option.map(selected, saveBeacon);
-                                    
-                                  }),
-                                title: "Yes"
-                              }), React.createElement(ReactNative.Button, {
-                                onPress: (function (param) {
-                                    return Curry._1(setSelected, (function (param) {
-                                                  
-                                                }));
-                                  }),
-                                title: "No"
-                              }))
-                  ) : React.createElement(ReactNative.View, {
-                        children: null
-                      }, React.createElement(ReactNative.Text, {
-                            children: "Paired with " + appState._0.id
-                          }), React.createElement(ReactNative.Button, {
-                            onPress: (function (param) {
-                                return Curry._1(setAppState, (function (param) {
-                                              return StateProvider.take(/* ConfirmBeaconSaved */1, param);
-                                            }));
-                              }),
-                            title: "Proceed"
-                          })), React.createElement(ReactNative.FlatList, {
+                    }), tmp, React.createElement(ReactNative.FlatList, {
                       data: match$1[0],
                       keyExtractor: (function (beacon, param) {
                           return beacon.id;
