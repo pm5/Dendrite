@@ -28,7 +28,3 @@ let queryAll = "
 
 let to_string = user => user->Js.Json.stringifyAny->Option.getExn
 let from_string = Js.Json.parseExn
-
-let dangers = (_user, _neighbors) => {
-  ()
-}

@@ -1,1 +1,4 @@
-type t = { name: string }
+type t = {
+  name: string,
+  bindsTo: array<Pathogen.t>,
+}
