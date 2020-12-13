@@ -15,5 +15,10 @@
       "subdirs": true
     }
   ],
-  "bs-dependencies": ["reason-react", "reason-react-native", "bs-fetch"]
+  "bs-dependencies": [
+    "reason-react",
+    "reason-react-native",
+    "bs-fetch",
+    "@reason-react-native/async-storage"
+  ]
 }

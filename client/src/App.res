@@ -211,6 +211,10 @@ module AppView = {
 @react.component
 let app = () => {
   let (appState, setAppState) = React.useState(() => State.Start)
+  {
+    open Async
+    ReactNativeAsyncStorage.setItem("foo", "bar")->then_(() => Js.log("woot")->async)  |> ignore
+  }
   <>
     <StateProvider value=(appState, setAppState)>
       <AppView />

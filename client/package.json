@@ -14,6 +14,8 @@
   },
   "dependencies": {
     "@lg2/react-native-eddystone": "^0.1.5",
+    "@react-native-community/async-storage": "^1.12.1",
+    "@reason-react-native/async-storage": "^1.6.1",
     "bs-fetch": "^0.6.2",
     "react": "^16.14.0",
     "react-native": "^0.62.0",
