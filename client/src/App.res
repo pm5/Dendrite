@@ -49,8 +49,20 @@ module PairBeaconScreen = {
   @react.component
   let make = () => {
     let (appState, setAppState) = React.useContext(StateProvider.stateContext)
-    let (beacons, _setBeacons) = React.useState(() => [ { Beacon.id: "123" } ])
+    let (beacons, setBeacons) = React.useState(() => [])
     let (selected: option<Beacon.t>, setSelected) = React.useState(() => None)
+
+    React.useEffect0(() => {
+      let _ = Js.Global.setTimeout(() => {
+        setBeacons(_ => [
+          { Beacon.id: "012" },
+          { Beacon.id: "345" },
+          { Beacon.id: "678" },
+          { Beacon.id: "abc" },
+        ])
+      }, 4000)
+      None
+    })
 
     let saveBeacon = beacon => {
       open Async
