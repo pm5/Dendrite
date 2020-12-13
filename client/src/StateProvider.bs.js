@@ -26,7 +26,7 @@ function useContext(param) {
 function take(action, currentState) {
   if (typeof action !== "number") {
     if (action.TAG === /* SaveBeacon */0) {
-      if (typeof currentState === "number" && currentState === 1) {
+      if (typeof currentState === "number" && currentState !== 0) {
         return {
                 TAG: /* BeaconSaved */2,
                 _0: action._0

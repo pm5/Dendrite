@@ -18,20 +18,7 @@ function App$AppScreen(Props) {
   var tmp;
   var exit = 0;
   if (typeof state === "number") {
-    switch (state) {
-      case /* Start */0 :
-          tmp = React.createElement(StartScreen.make, {});
-          break;
-      case /* NearbyUserDetected */2 :
-      case /* QueryingUser */3 :
-          tmp = null;
-          break;
-      case /* WarningUser */4 :
-          tmp = React.createElement(WarnScreen.make, {});
-          break;
-      default:
-        tmp = React.createElement(PairBeaconScreen.make, {});
-    }
+    tmp = state === /* Start */0 ? React.createElement(StartScreen.make, {}) : React.createElement(PairBeaconScreen.make, {});
   } else {
     switch (state.TAG | 0) {
       case /* UserLoaded */1 :
@@ -42,6 +29,14 @@ function App$AppScreen(Props) {
           tmp = React.createElement(MonitorScreen.make, {
                 beacon: state._0,
                 user: state._1
+              });
+          break;
+      case /* WarningUser */5 :
+          tmp = React.createElement(WarnScreen.make, {
+                beacon: state._0,
+                user: state._1,
+                neighbor: state._2,
+                pathogen: state._3
               });
           break;
       default:

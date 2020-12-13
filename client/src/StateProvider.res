@@ -9,9 +9,7 @@ type t =
   | LoadingUser(Beacon.t)
 
   | Monitoring(Beacon.t, Citizen.t)
-  | NearbyUserDetected
-  | QueryingUser
-  | WarningUser
+  | WarningUser(Beacon.t, Citizen.t, Neighbor.t, Pathogen.t)
 
 type action =
   | PairBeacon

@@ -2,26 +2,37 @@
 
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
+import * as Neighbor from "../core/Neighbor.bs.js";
+import * as Belt_Array from "bs-platform/lib/es6/belt_Array.js";
+import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
 import * as ReactNative from "react-native";
 import * as StateProvider from "../StateProvider.bs.js";
 
 var samples = [{
-    id: "012",
-    infections: [],
-    vaccinations: [],
-    immunities: []
+    citizen: {
+      id: "012",
+      infections: [],
+      vaccinations: [],
+      immunities: []
+    },
+    distanceInMeters: 3.0,
+    measuredAt: new Date()
   }];
 
 function MonitorScreen(Props) {
+  var beacon = Props.beacon;
+  var user = Props.user;
   var match = StateProvider.useContext(undefined);
   var setAppState = match[1];
   var match$1 = React.useState(function () {
         return [];
       });
   var setNeighbors = match$1[1];
-  React.useState(function () {
+  var neighbors = match$1[0];
+  var match$2 = React.useState(function () {
         
       });
+  var setDanger = match$2[1];
   React.useEffect((function () {
           var job = setInterval((function (param) {
                   return Curry._1(setNeighbors, (function (param) {
@@ -33,6 +44,19 @@ function MonitorScreen(Props) {
                     
                   });
         }), []);
+  React.useEffect((function () {
+          var dangers = Neighbor.dangeredBy(user, neighbors);
+          if (dangers.length !== 0) {
+            Curry._1(setDanger, (function (param) {
+                    return Belt_Array.get(dangers, 0);
+                  }));
+          }
+          return (function (param) {
+                    return Curry._1(setDanger, (function (param) {
+                                  
+                                }));
+                  });
+        }), [neighbors]);
   return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
                   children: null
                 }, React.createElement(ReactNative.Text, {
@@ -40,14 +64,15 @@ function MonitorScreen(Props) {
                     }), React.createElement(ReactNative.Button, {
                       onPress: (function (param) {
                           return Curry._1(setAppState, (function (param) {
-                                        return /* NearbyUserDetected */2;
-                                      }));
-                        }),
-                      title: "Nearby found"
-                    }), React.createElement(ReactNative.Button, {
-                      onPress: (function (param) {
-                          return Curry._1(setAppState, (function (param) {
-                                        return /* WarningUser */4;
+                                        return {
+                                                TAG: /* WarningUser */5,
+                                                _0: beacon,
+                                                _1: user,
+                                                _2: Belt_Option.getExn(Belt_Array.get(samples, 0)),
+                                                _3: {
+                                                  name: "foo"
+                                                }
+                                              };
                                       }));
                         }),
                       title: "Danger found"
@@ -61,4 +86,4 @@ export {
   make ,
   
 }
-/* react Not a pure module */
+/* samples Not a pure module */

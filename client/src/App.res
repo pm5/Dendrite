@@ -8,10 +8,9 @@ module AppScreen = {
       {switch state {
         | Start => <StartScreen />
         | ScanningBeacon | BeaconSaved(_) | BeaconPaired(_) => <PairBeaconScreen />
-        | LoadingUser(beacon) | UserLoaded(beacon, _) => <LoadUserScreen beacon=beacon />
-        | Monitoring(beacon, user) => <MonitorScreen beacon=beacon user=user />
-        | WarningUser => <WarnScreen />
-        | NearbyUserDetected | QueryingUser => React.null
+        | LoadingUser(beacon) | UserLoaded(beacon, _) => <LoadUserScreen beacon />
+        | Monitoring(beacon, user) => <MonitorScreen beacon user />
+        | WarningUser(beacon, user, neighbor, pathogen) => <WarnScreen beacon user neighbor pathogen />
       }}
     </>
   }
