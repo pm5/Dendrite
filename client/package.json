@@ -15,18 +15,18 @@
   "dependencies": {
     "@lg2/react-native-eddystone": "^0.1.5",
     "bs-fetch": "^0.6.2",
-    "react": "^16.11.0",
+    "react": "^16.14.0",
     "react-native": "^0.62.0",
     "reason-react": "^0.9.0",
     "reason-react-native": "^0.62.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.2",
-    "@babel/runtime": "^7.6.2",
-    "@graphql-codegen/cli": "^1.17.8",
+    "@babel/core": "^7.12.10",
+    "@babel/runtime": "^7.12.5",
+    "@graphql-codegen/cli": "^1.19.4",
     "@react-native-community/eslint-config": "^0.0.7",
     "babel-jest": "^24.9.0",
-    "bs-platform": "^8.0.0",
+    "bs-platform": "^8.4.2",
     "eslint": "^6.5.1",
     "graphql-codegen-reason-client": "^1.1.2",
     "jest": "^24.9.0",
