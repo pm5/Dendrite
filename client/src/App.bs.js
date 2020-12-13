@@ -4,9 +4,9 @@ import * as Async from "./Async.bs.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as State from "./State.bs.js";
 import * as React from "react";
+import * as $$Storage from "./Storage.bs.js";
 import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
 import * as ReactNative from "react-native";
-import * as AsyncStorage from "@react-native-community/async-storage";
 
 var stateContext = React.createContext([
       /* Start */0,
@@ -70,8 +70,6 @@ var StartScreen = {
   make: App$StartScreen
 };
 
-var Beacon = {};
-
 function App$PairBeaconScreen(Props) {
   var match = React.useContext(stateContext);
   var setAppState = match[1];
@@ -85,17 +83,25 @@ function App$PairBeaconScreen(Props) {
         
       });
   var setSelected = match$2[1];
+  var selected = match$2[0];
+  var saveBeacon = function (beacon) {
+    Async.then_($$Storage.saveBeacon(beacon), (function (param) {
+            return Async.async(Curry._1(setAppState, (function (param) {
+                              return State.next(/* SaveBeacon */1, param);
+                            })));
+          }));
+    
+  };
   return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
                   children: null
                 }, React.createElement(ReactNative.Text, {
                       children: "Pairing beacon"
-                    }), appState === /* ScanningBeacon */1 && Belt_Option.isSome(match$2[0]) ? React.createElement(ReactNative.View, {
+                    }), appState === /* ScanningBeacon */1 && Belt_Option.isSome(selected) ? React.createElement(ReactNative.View, {
                         children: null
                       }, React.createElement(ReactNative.Button, {
                             onPress: (function (param) {
-                                return Curry._1(setAppState, (function (param) {
-                                              return State.next(/* SaveBeacon */1, param);
-                                            }));
+                                Belt_Option.map(selected, saveBeacon);
+                                
                               }),
                             title: "Yes"
                           }), React.createElement(ReactNative.Button, {
@@ -336,8 +342,11 @@ function App$app(Props) {
   var match = React.useState(function () {
         return /* Start */0;
       });
-  Async.then_(AsyncStorage.default.setItem("foo", "bar"), (function (param) {
-          return Async.async((console.log("woot"), undefined));
+  Async.then_($$Storage.loadBeacon(undefined), (function (b) {
+          return Async.async(Belt_Option.map(b, (function (beacon) {
+                            console.log(beacon.id);
+                            
+                          })));
         }));
   return React.createElement(React.Fragment, undefined, React.createElement(make, makeProps([
                       match[0],
@@ -350,7 +359,6 @@ var app = App$app;
 export {
   StateProvider ,
   StartScreen ,
-  Beacon ,
   PairBeaconScreen ,
   LoadUserScreen ,
   MonitorScreen ,

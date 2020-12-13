@@ -20,5 +20,8 @@
     "reason-react-native",
     "bs-fetch",
     "@reason-react-native/async-storage"
-  ]
+  ],
+  "warnings": {
+    "number": "-48"
+  }
 }

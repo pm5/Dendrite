@@ -1,5 +1,5 @@
-open ReactNative
 open Belt
+open ReactNative
 
 module StateProvider = {
   let stateContext = React.createContext((State.Start, _ => ()))
@@ -45,19 +45,19 @@ module StartScreen = {
   }
 }
 
-module Beacon = {
-  type t = { id: string }
-}
-
 module PairBeaconScreen = {
   @react.component
   let make = () => {
     let (appState, setAppState) = React.useContext(StateProvider.stateContext)
-    let (beacons, setBeacons) = React.useState(() => [ { Beacon.id: "123" } ])
+    let (beacons, _setBeacons) = React.useState(() => [ { Beacon.id: "123" } ])
     let (selected: option<Beacon.t>, setSelected) = React.useState(() => None)
 
-    let saveBeacon = _ => {
-      setAppState(State.next(SaveBeacon))
+    let saveBeacon = beacon => {
+      open Async
+      Storage.saveBeacon(beacon)
+        ->then_(() => setAppState(State.next(SaveBeacon))->async)
+        |> ignore
+      None
     }
 
     let confirmSaved = () => {
@@ -70,7 +70,7 @@ module PairBeaconScreen = {
         {
           if appState == State.ScanningBeacon && selected->Option.isSome {
             <View>
-              <Button title="Yes" onPress={_ => saveBeacon(selected)} />
+              <Button title="Yes" onPress={_ => selected->Option.map(saveBeacon) |> ignore} />
               <Button title="No" onPress={_ => setSelected(_ => None)} />
             </View>
           } else if appState == State.BeaconPaired {
@@ -213,7 +213,9 @@ let app = () => {
   let (appState, setAppState) = React.useState(() => State.Start)
   {
     open Async
-    ReactNativeAsyncStorage.setItem("foo", "bar")->then_(() => Js.log("woot")->async)  |> ignore
+    Storage.loadBeacon()
+      ->then_(b => b->Option.map(beacon => Js.log(beacon.id))->async)
+      |> ignore
   }
   <>
     <StateProvider value=(appState, setAppState)>
