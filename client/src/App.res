@@ -1,17 +1,6 @@
 open Belt
 open ReactNative
 
-module StateProvider = {
-  let stateContext = React.createContext((State.Start, _ => ()))
-
-  /// XXX
-  let makeProps = (~value, ~children, ()) => {
-    "value": value,
-    "children": children,
-  }
-  let make = React.Context.provider(stateContext)
-}
-
 module StartScreen = {
   @react.component
   let make = () => {
@@ -25,86 +14,20 @@ module StartScreen = {
       <View>
         <Text>{"Start Screen"->React.string}</Text>
         <Button
-          onPress={_ => setAppState(_ => State.ScanningBeacon)}
+          onPress={_ => setAppState(_ => StateProvider.ScanningBeacon)}
           title="No beacon paired"
           />
         <Button
-          onPress={_ => setAppState(_ => State.NoUserStored)}
+          onPress={_ => setAppState(_ => StateProvider.NoUserStored)}
           title="No user data"
           />
         <Button
-          onPress={_ => setAppState(_ => State.Initializing)}
+          onPress={_ => setAppState(_ => StateProvider.Initializing)}
           title="All good to go"
           />
         <Button
           onPress={_ => clearBeacon()}
           title="Clear beacon data"
-          />
-      </View>
-    </>
-  }
-}
-
-module PairBeaconScreen = {
-  @react.component
-  let make = () => {
-    let (appState, setAppState) = React.useContext(StateProvider.stateContext)
-    let (beacons, setBeacons) = React.useState(() => [])
-    let (selected: option<Beacon.t>, setSelected) = React.useState(() => None)
-
-    React.useEffect0(() => {
-      let _ = Js.Global.setTimeout(() => {
-        setBeacons(_ => [
-          { Beacon.id: "012" },
-          { Beacon.id: "345" },
-          { Beacon.id: "678" },
-          { Beacon.id: "abc" },
-        ])
-      }, 4000)
-      None
-    })
-
-    let saveBeacon = beacon => {
-      open Async
-      Storage.saveBeacon(beacon)
-        ->then_(() => setAppState(State.next(SaveBeacon))->async)
-        |> ignore
-      None
-    }
-
-    let confirmSaved = () => {
-      setAppState(State.next(ConfirmBeaconSaved))
-    }
-
-    <>
-      <View>
-        <Text>{"Pairing beacon"->React.string}</Text>
-        {
-          if appState == State.ScanningBeacon && selected->Option.isSome {
-            <View>
-              <Button title="Yes" onPress={_ => selected->Option.map(saveBeacon) |> ignore} />
-              <Button title="No" onPress={_ => setSelected(_ => None)} />
-            </View>
-          } else if appState == State.BeaconPaired {
-            <View>
-              <Button title="Proceed" onPress={_ => confirmSaved()} />
-            </View>
-          } else {
-            React.null
-          }
-        }
-        <FlatList
-          data=beacons
-          renderItem={({ VirtualizedList.item, _ }) =>
-              <View key=item.id>
-                <Text key=item.id>{ item.id->React.string }</Text>
-                <Button
-                  title="Select"
-                  onPress={_ => setSelected(_ => Some(item))}
-                  />
-              </View>
-          }
-          keyExtractor={(beacon, _) => beacon.id}
           />
       </View>
     </>
@@ -117,24 +40,24 @@ module LoadUserScreen = {
     let (appState, setAppState) = React.useContext(StateProvider.stateContext)
     React.useEffect1(() =>
       switch (appState) {
-        | State.NoUserStored => {
-          setAppState(_ => State.DownloadingUser)
+        | StateProvider.NoUserStored => {
+          setAppState(_ => StateProvider.DownloadingUser)
           None
         }
-        | State.DownloadingUser => {
-          setAppState(_ => State.UserJustStored)
+        | StateProvider.DownloadingUser => {
+          setAppState(_ => StateProvider.UserJustStored)
           None
         }
-        | State.UserJustStored => {
-          setAppState(_ => State.Start)
+        | StateProvider.UserJustStored => {
+          setAppState(_ => StateProvider.Start)
           None
         }
-        | State.ErrorUserInvalid => {
-          setAppState(_ => State.BeaconUnpaired)
+        | StateProvider.ErrorUserInvalid => {
+          setAppState(_ => StateProvider.BeaconUnpaired)
           None
         }
-        | State.ErrorUserNotFound => {
-          setAppState(_ => State.BeaconUnpaired)
+        | StateProvider.ErrorUserNotFound => {
+          setAppState(_ => StateProvider.BeaconUnpaired)
           None
         }
         | _ => None
@@ -154,19 +77,19 @@ module MonitorScreen = {
     let (appState, setAppState) = React.useContext(StateProvider.stateContext)
     React.useEffect1(() =>
       switch (appState) {
-        | State.Initializing => {
-          setAppState(_ => State.Monitoring)
+        | StateProvider.Initializing => {
+          setAppState(_ => StateProvider.Monitoring)
           None
         }
-        | State.Monitoring => {
+        | StateProvider.Monitoring => {
           None
         }
-        | State.NearbyUserDetected => {
-          setAppState(_ => State.QueryingUser)
+        | StateProvider.NearbyUserDetected => {
+          setAppState(_ => StateProvider.QueryingUser)
           None
         }
-        | State.QueryingUser => {
-          setAppState(_ => State.Monitoring)
+        | StateProvider.QueryingUser => {
+          setAppState(_ => StateProvider.Monitoring)
           None
         }
         | _ => None
@@ -176,11 +99,11 @@ module MonitorScreen = {
       <View>
         <Text>{"Monitor"->React.string}</Text>
         <Button
-          onPress={_ => setAppState(_ => State.NearbyUserDetected)}
+          onPress={_ => setAppState(_ => StateProvider.NearbyUserDetected)}
           title="Nearby found"
           />
         <Button
-          onPress={_ => setAppState(_ => State.WarningUser)}
+          onPress={_ => setAppState(_ => StateProvider.WarningUser)}
           title="Danger found"
           />
       </View>
@@ -196,7 +119,7 @@ module WarnScreen = {
       <View>
         <Text>{"Warning!"->React.string}</Text>
         <Button
-          onPress={_ => setAppState(_ => State.Monitoring)}
+          onPress={_ => setAppState(_ => StateProvider.Monitoring)}
           title="No danger anymore"
           />
       </View>
@@ -222,7 +145,7 @@ module AppView = {
 
 @react.component
 let app = () => {
-  let (appState, setAppState) = React.useState(() => State.Start)
+  let (appState, setAppState) = React.useState(() => StateProvider.Start)
   {
     open Async
     Storage.loadBeacon()

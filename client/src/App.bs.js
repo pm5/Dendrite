@@ -2,36 +2,15 @@
 
 import * as Async from "./Async.bs.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
-import * as State from "./State.bs.js";
 import * as React from "react";
 import * as $$Storage from "./Storage.bs.js";
 import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
 import * as ReactNative from "react-native";
-
-var stateContext = React.createContext([
-      /* Start */0,
-      (function (param) {
-          
-        })
-    ]);
-
-function makeProps(value, children, param) {
-  return {
-          value: value,
-          children: children
-        };
-}
-
-var make = stateContext.Provider;
-
-var StateProvider = {
-  stateContext: stateContext,
-  makeProps: makeProps,
-  make: make
-};
+import * as StateProvider from "./StateProvider.bs.js";
+import * as PairBeaconScreen from "./components/PairBeaconScreen.bs.js";
 
 function App$StartScreen(Props) {
-  var match = React.useContext(stateContext);
+  var match = React.useContext(StateProvider.stateContext);
   var setAppState = match[1];
   return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
                   children: null
@@ -70,89 +49,8 @@ var StartScreen = {
   make: App$StartScreen
 };
 
-function App$PairBeaconScreen(Props) {
-  var match = React.useContext(stateContext);
-  var setAppState = match[1];
-  var appState = match[0];
-  var match$1 = React.useState(function () {
-        return [{
-                  id: "123"
-                }];
-      });
-  var match$2 = React.useState(function () {
-        
-      });
-  var setSelected = match$2[1];
-  var selected = match$2[0];
-  var saveBeacon = function (beacon) {
-    Async.then_($$Storage.saveBeacon(beacon), (function (param) {
-            return Async.async(Curry._1(setAppState, (function (param) {
-                              return State.next(/* SaveBeacon */1, param);
-                            })));
-          }));
-    
-  };
-  return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
-                  children: null
-                }, React.createElement(ReactNative.Text, {
-                      children: "Pairing beacon"
-                    }), appState === /* ScanningBeacon */1 && Belt_Option.isSome(selected) ? React.createElement(ReactNative.View, {
-                        children: null
-                      }, React.createElement(ReactNative.Button, {
-                            onPress: (function (param) {
-                                Belt_Option.map(selected, saveBeacon);
-                                
-                              }),
-                            title: "Yes"
-                          }), React.createElement(ReactNative.Button, {
-                            onPress: (function (param) {
-                                return Curry._1(setSelected, (function (param) {
-                                              
-                                            }));
-                              }),
-                            title: "No"
-                          })) : (
-                    appState === /* BeaconPaired */2 ? React.createElement(ReactNative.View, {
-                            children: React.createElement(ReactNative.Button, {
-                                  onPress: (function (param) {
-                                      return Curry._1(setAppState, (function (param) {
-                                                    return State.next(/* ConfirmBeaconSaved */2, param);
-                                                  }));
-                                    }),
-                                  title: "Proceed"
-                                })
-                          }) : null
-                  ), React.createElement(ReactNative.FlatList, {
-                      data: match$1[0],
-                      keyExtractor: (function (beacon, param) {
-                          return beacon.id;
-                        }),
-                      renderItem: (function (param) {
-                          var item = param.item;
-                          return React.createElement(ReactNative.View, {
-                                      children: null,
-                                      key: item.id
-                                    }, React.createElement(ReactNative.Text, {
-                                          children: item.id,
-                                          key: item.id
-                                        }), React.createElement(ReactNative.Button, {
-                                          onPress: (function (param) {
-                                              return Curry._1(setSelected, (function (param) {
-                                                            return item;
-                                                          }));
-                                            }),
-                                          title: "Select"
-                                        }));
-                        })
-                    })));
-}
-
-var PairBeaconScreen = {
-  make: App$PairBeaconScreen
-};
-
 function App$LoadUserScreen(Props) {
-  var match = React.useContext(stateContext);
+  var match = React.useContext(StateProvider.stateContext);
   var setAppState = match[1];
   var appState = match[0];
   React.useEffect((function () {
@@ -207,7 +105,7 @@ var LoadUserScreen = {
 };
 
 function App$MonitorScreen(Props) {
-  var match = React.useContext(stateContext);
+  var match = React.useContext(StateProvider.stateContext);
   var setAppState = match[1];
   var appState = match[0];
   React.useEffect((function () {
@@ -268,7 +166,7 @@ var MonitorScreen = {
 };
 
 function App$WarnScreen(Props) {
-  var match = React.useContext(stateContext);
+  var match = React.useContext(StateProvider.stateContext);
   var setAppState = match[1];
   return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
                   children: null
@@ -289,7 +187,7 @@ var WarnScreen = {
 };
 
 function App$AppView(Props) {
-  var match = React.useContext(stateContext);
+  var match = React.useContext(StateProvider.stateContext);
   var tmp;
   var exit = 0;
   switch (match[0]) {
@@ -321,7 +219,7 @@ function App$AppView(Props) {
   }
   switch (exit) {
     case 1 :
-        tmp = React.createElement(App$PairBeaconScreen, {});
+        tmp = React.createElement(PairBeaconScreen.make, {});
         break;
     case 2 :
         tmp = React.createElement(App$LoadUserScreen, {});
@@ -348,7 +246,7 @@ function App$app(Props) {
                             
                           })));
         }));
-  return React.createElement(React.Fragment, undefined, React.createElement(make, makeProps([
+  return React.createElement(React.Fragment, undefined, React.createElement(StateProvider.make, StateProvider.makeProps([
                       match[0],
                       match[1]
                     ], React.createElement(App$AppView, {}), undefined)));
@@ -357,9 +255,7 @@ function App$app(Props) {
 var app = App$app;
 
 export {
-  StateProvider ,
   StartScreen ,
-  PairBeaconScreen ,
   LoadUserScreen ,
   MonitorScreen ,
   WarnScreen ,
@@ -367,4 +263,4 @@ export {
   app ,
   
 }
-/* stateContext Not a pure module */
+/* react Not a pure module */
