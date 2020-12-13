@@ -11,9 +11,9 @@ let loadBeacon = () =>
       )
 
 let saveUser = user =>
-  ReactNativeAsyncStorage.setItem("user_id", user.User.id)
+  ReactNativeAsyncStorage.setItem("user_id", user.Citizen.id)
 let loadUser = () =>
   ReactNativeAsyncStorage.getItem("user_id")
     ->then_(idOrNull =>
-        idOrNull->Js.Null.toOption->Option.map(id => { User.id: id })->async
+        idOrNull->Js.Null.toOption->Option.map(id => { Citizen.id: id })->async
       )

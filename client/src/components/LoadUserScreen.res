@@ -7,7 +7,7 @@ let make = (~beacon) => {
     open Async
     // XXX for tests
     let _ = Js.Global.setTimeout(() => {
-      let user = { User.id: beacon.Beacon.id }
+      let user = { Citizen.id: beacon.Beacon.id }
       Storage.saveUser(user)
         ->then_(() => setAppState(StateProvider.take(StateProvider.SaveUser(user)))->async)
         |> ignore

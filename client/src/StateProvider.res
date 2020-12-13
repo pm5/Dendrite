@@ -1,14 +1,14 @@
 type t =
   | Start
   | BeaconPaired(Beacon.t)
-  | UserLoaded(Beacon.t, User.t)
+  | UserLoaded(Beacon.t, Citizen.t)
 
   | ScanningBeacon
   | BeaconSaved(Beacon.t)
 
   | LoadingUser(Beacon.t)
 
-  | Monitoring(Beacon.t, User.t)
+  | Monitoring(Beacon.t, Citizen.t)
   | NearbyUserDetected
   | QueryingUser
   | WarningUser
@@ -18,7 +18,7 @@ type action =
   | SaveBeacon(Beacon.t)
   | ConfirmBeaconSaved
   | LoadUser
-  | SaveUser(User.t)
+  | SaveUser(Citizen.t)
   | StartMonitor
 
 let stateContext = React.createContext((Start, (_: t => t) => ()))

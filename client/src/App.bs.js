@@ -24,15 +24,8 @@ function App$AppScreen(Props) {
           break;
       case /* NearbyUserDetected */2 :
       case /* QueryingUser */3 :
-          throw {
-                RE_EXN_ID: "Match_failure",
-                _1: [
-                  "App.res",
-                  8,
-                  7
-                ],
-                Error: new Error()
-              };
+          tmp = null;
+          break;
       case /* WarningUser */4 :
           tmp = React.createElement(WarnScreen.make, {});
           break;

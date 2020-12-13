@@ -11,6 +11,7 @@ module AppScreen = {
         | LoadingUser(beacon) | UserLoaded(beacon, _) => <LoadUserScreen beacon=beacon />
         | Monitoring(beacon, user) => <MonitorScreen beacon=beacon user=user />
         | WarningUser => <WarnScreen />
+        | NearbyUserDetected | QueryingUser => React.null
       }}
     </>
   }
