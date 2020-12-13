@@ -14,6 +14,10 @@ function from_string(prim) {
   return JSON.parse(prim);
 }
 
+function dangers(_user, _neighbors) {
+  
+}
+
 var queryAll = "\n  allCitizens {\n    id\n    infections { pathogen { name } }\n    vaccinations { vaccine { name } }\n    immunities { antibody { name, bindsTo { name } } expiresAt }\n  }\n`\n";
 
 export {
@@ -21,6 +25,7 @@ export {
   queryAll ,
   to_string ,
   from_string ,
+  dangers ,
   
 }
 /* No side effect */
