@@ -5,9 +5,34 @@ import * as React from "react";
 import * as ReactNative from "react-native";
 import * as StateProvider from "../StateProvider.bs.js";
 
+var samples = [{
+    id: "012",
+    infections: [],
+    vaccinations: [],
+    immunities: []
+  }];
+
 function MonitorScreen(Props) {
-  var match = React.useContext(StateProvider.stateContext);
+  var match = StateProvider.useContext(undefined);
   var setAppState = match[1];
+  var match$1 = React.useState(function () {
+        return [];
+      });
+  var setNeighbors = match$1[1];
+  React.useState(function () {
+        
+      });
+  React.useEffect((function () {
+          var job = setInterval((function (param) {
+                  return Curry._1(setNeighbors, (function (param) {
+                                return samples;
+                              }));
+                }), 10000);
+          return (function (param) {
+                    clearInterval(job);
+                    
+                  });
+        }), []);
   return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
                   children: null
                 }, React.createElement(ReactNative.Text, {
@@ -32,6 +57,7 @@ function MonitorScreen(Props) {
 var make = MonitorScreen;
 
 export {
+  samples ,
   make ,
   
 }

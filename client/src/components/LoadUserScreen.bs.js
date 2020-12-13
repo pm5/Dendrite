@@ -13,8 +13,15 @@ function LoadUserScreen(Props) {
   var setAppState = match[1];
   React.useEffect((function () {
           setTimeout((function (param) {
+                  var user_id = beacon.id;
+                  var user_infections = [];
+                  var user_vaccinations = [];
+                  var user_immunities = [];
                   var user = {
-                    id: beacon.id
+                    id: user_id,
+                    infections: user_infections,
+                    vaccinations: user_vaccinations,
+                    immunities: user_immunities
                   };
                   Async.then_($$Storage.saveUser(user), (function (param) {
                           var partial_arg = {
