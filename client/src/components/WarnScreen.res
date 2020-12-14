@@ -2,8 +2,18 @@ open Belt
 open ReactNative
 
 @react.component
-let make = (~beacon as _, ~user as _, ~neighbor, ~pathogen) => {
-  let (_, _setAppState) = React.useContext(StateProvider.stateContext)
+let make = (~beacon as _, ~user, ~neighbor, ~pathogen) => {
+  let (_, setAppState) = React.useContext(StateProvider.stateContext)
+  let (_neighbors, danger) = Monitor.useMonitor(user)
+
+  React.useEffect1(() => {
+    switch danger {
+      | Some(neighbor, pathogen) => setAppState(StateProvider.take(StateProvider.WarnUser(neighbor, pathogen)))
+      | None => setAppState(StateProvider.take(StateProvider.StartMonitor))
+    }
+    None
+  }, [danger])
+
   <>
     <View>
       <Text>{"Warning!"->React.string}</Text>
