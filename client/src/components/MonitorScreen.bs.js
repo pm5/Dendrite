@@ -33,6 +33,7 @@ function MonitorScreen(Props) {
         
       });
   var setDanger = match$2[1];
+  var danger = match$2[0];
   React.useEffect((function () {
           var job = setInterval((function (param) {
                   return Curry._1(setNeighbors, (function (param) {
@@ -57,6 +58,21 @@ function MonitorScreen(Props) {
                                 }));
                   });
         }), [neighbors]);
+  React.useEffect((function () {
+          if (danger !== undefined) {
+            var partial_arg_0 = danger[0];
+            var partial_arg_1 = danger[1];
+            var partial_arg = {
+              TAG: /* WarnUser */2,
+              _0: partial_arg_0,
+              _1: partial_arg_1
+            };
+            Curry._1(setAppState, (function (param) {
+                    return StateProvider.take(partial_arg, param);
+                  }));
+          }
+          
+        }), [danger]);
   return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
                   children: null
                 }, React.createElement(ReactNative.Text, {

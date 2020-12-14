@@ -5,12 +5,18 @@ import * as ReactNative from "react-native";
 import * as StateProvider from "../StateProvider.bs.js";
 
 function WarnScreen(Props) {
+  var neighbor = Props.neighbor;
+  var pathogen = Props.pathogen;
   React.useContext(StateProvider.stateContext);
   return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
-                  children: React.createElement(ReactNative.Text, {
-                        children: "Warning!"
-                      })
-                }));
+                  children: null
+                }, React.createElement(ReactNative.Text, {
+                      children: "Warning!"
+                    }), React.createElement(ReactNative.Text, {
+                      children: "This person " + neighbor.citizen.id + " is dangerous to you."
+                    }), React.createElement(ReactNative.Text, {
+                      children: "Carries " + pathogen.name + " within " + String(neighbor.distanceInMeters) + " meters."
+                    })));
 }
 
 var make = WarnScreen;

@@ -18,7 +18,7 @@ let samples: array<Neighbor.t> = [
 let make = (~beacon, ~user) => {
   let (_appState, setAppState) = StateProvider.useContext()
   let (neighbors: array<Neighbor.t>, setNeighbors) = React.useState(() => [])
-  let (_danger: option<(Neighbor.t, Pathogen.t)>, setDanger) = React.useState(() => None)
+  let (danger: option<(Neighbor.t, Pathogen.t)>, setDanger) = React.useState(() => None)
 
   React.useEffect0(() => {
     let job = Js.Global.setInterval(() => {
@@ -35,6 +35,14 @@ let make = (~beacon, ~user) => {
     }
     Some(() => setDanger(_ => None))
   }, [neighbors])
+
+  React.useEffect1(() => {
+    switch danger {
+      | Some(neighbor, pathogen) => setAppState(StateProvider.take(StateProvider.WarnUser(neighbor, pathogen)))
+      | None => ()
+    }
+    None
+  }, [danger])
 
   <>
     <View>

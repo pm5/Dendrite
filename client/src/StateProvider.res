@@ -18,6 +18,7 @@ type action =
   | LoadUser
   | SaveUser(Citizen.t)
   | StartMonitor
+  | WarnUser(Neighbor.t, Pathogen.t)
 
 let stateContext = React.createContext((Start, (_: t => t) => ()))
 
@@ -38,5 +39,6 @@ let take = (action, currentState) =>
     | (LoadUser, BeaconPaired(beacon)) => LoadingUser(beacon)
     | (SaveUser(user), LoadingUser(beacon)) => UserLoaded(beacon, user)
     | (StartMonitor, UserLoaded(beacon, user)) => Monitoring(beacon, user)
+    | (WarnUser(neighbor, pathogen), Monitoring(beacon, user)) => WarningUser(beacon, user, neighbor, pathogen)
     | _ => failwith("Invalid action at current state")
   }
