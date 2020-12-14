@@ -11,7 +11,12 @@ let make = (~beacon) => {
         Citizen.id: beacon.Beacon.id,
         infections: [],
         vaccinations: [],
-        immunities: [],
+        immunities: [
+          {
+            antibody: { name: "SwineFlu-H", bindsTo: [ { name: "SwineFlu-H" } ] },
+            expiresAt: Js.Date.makeWithYMD(~year=2021., ~month=1., ~date=31., ())
+          }
+        ],
       }
       Storage.saveUser(user)
         ->then_(() => setAppState(StateProvider.take(StateProvider.SaveUser(user)))->async)

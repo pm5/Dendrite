@@ -9,43 +9,30 @@ import * as ReactNative from "react-native";
 import * as StateProvider from "../StateProvider.bs.js";
 
 function MonitorScreen(Props) {
-  var beacon = Props.beacon;
   var user = Props.user;
   var match = StateProvider.useContext(undefined);
-  var setAppState = match[1];
-  var match$1 = Monitor.useMonitor(user);
+  var match$1 = Monitor.useMonitor(undefined, user, match[1]);
+  var setDanger = match$1[2];
   var danger = match$1[1];
-  React.useEffect((function () {
-          if (danger !== undefined) {
-            var partial_arg_0 = danger[0];
-            var partial_arg_1 = danger[1];
-            var partial_arg = {
-              TAG: /* WarnUser */2,
-              _0: partial_arg_0,
-              _1: partial_arg_1
-            };
-            Curry._1(setAppState, (function (param) {
-                    return StateProvider.take(partial_arg, param);
-                  }));
-          }
-          
-        }), [danger]);
   return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
                   children: null
                 }, React.createElement(ReactNative.Text, {
                       children: "Monitor"
+                    }), React.createElement(ReactNative.Text, {
+                      children: Belt_Option.getWithDefault(Belt_Option.map(match$1[0], (function (neighbors) {
+                                  return String(neighbors.length) + " neighbors";
+                                })), "No results yet")
+                    }), React.createElement(ReactNative.Text, {
+                      children: danger !== undefined ? danger[0].citizen.id + " is dangerous" : "No danger"
                     }), React.createElement(ReactNative.Button, {
                       onPress: (function (param) {
-                          return Curry._1(setAppState, (function (param) {
-                                        return {
-                                                TAG: /* WarningUser */5,
-                                                _0: beacon,
-                                                _1: user,
-                                                _2: Belt_Option.getExn(Belt_Array.get(Monitor.samples, 0)),
-                                                _3: {
+                          return Curry._1(setDanger, (function (param) {
+                                        return [
+                                                Belt_Option.getExn(Belt_Array.get(Monitor.samples, 0)),
+                                                {
                                                   name: "foo"
                                                 }
-                                              };
+                                              ];
                                       }));
                         }),
                       title: "Danger found"

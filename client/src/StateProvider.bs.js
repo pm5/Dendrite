@@ -51,15 +51,22 @@ function take(action, currentState) {
                   };
           }
       case /* StartMonitor */3 :
-          if (typeof currentState === "number" || currentState.TAG !== /* UserLoaded */1) {
+          if (typeof currentState === "number") {
             return Pervasives.failwith("Invalid action at current state");
-          } else {
-            return {
-                    TAG: /* Monitoring */4,
-                    _0: currentState._0,
-                    _1: currentState._1
-                  };
           }
+          switch (currentState.TAG | 0) {
+            case /* UserLoaded */1 :
+            case /* Monitoring */4 :
+            case /* WarningUser */5 :
+                break;
+            default:
+              return Pervasives.failwith("Invalid action at current state");
+          }
+          return {
+                  TAG: /* Monitoring */4,
+                  _0: currentState._0,
+                  _1: currentState._1
+                };
       
     }
   } else {
@@ -84,17 +91,23 @@ function take(action, currentState) {
                   };
           }
       case /* WarnUser */2 :
-          if (typeof currentState === "number" || currentState.TAG !== /* Monitoring */4) {
+          if (typeof currentState === "number") {
             return Pervasives.failwith("Invalid action at current state");
-          } else {
-            return {
-                    TAG: /* WarningUser */5,
-                    _0: currentState._0,
-                    _1: currentState._1,
-                    _2: action._0,
-                    _3: action._1
-                  };
           }
+          switch (currentState.TAG | 0) {
+            case /* Monitoring */4 :
+            case /* WarningUser */5 :
+                break;
+            default:
+              return Pervasives.failwith("Invalid action at current state");
+          }
+          return {
+                  TAG: /* WarningUser */5,
+                  _0: currentState._0,
+                  _1: currentState._1,
+                  _2: action._0,
+                  _3: action._1
+                };
       
     }
   }

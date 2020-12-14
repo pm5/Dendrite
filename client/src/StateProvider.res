@@ -40,6 +40,7 @@ let take = (action, currentState) =>
     | (SaveUser(user), LoadingUser(beacon)) => UserLoaded(beacon, user)
     | (StartMonitor, UserLoaded(beacon, user)) => Monitoring(beacon, user)
     | (WarnUser(neighbor, pathogen), Monitoring(beacon, user)) => WarningUser(beacon, user, neighbor, pathogen)
+    | (StartMonitor, Monitoring(beacon, user)) => Monitoring(beacon, user)
     | (WarnUser(neighbor, pathogen), WarningUser(beacon, user, _, _)) => WarningUser(beacon, user, neighbor, pathogen)
     | (StartMonitor, WarningUser(beacon, user, _, _)) => Monitoring(beacon, user)
     | _ => failwith("Invalid action at current state")

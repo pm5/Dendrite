@@ -68,16 +68,7 @@ function App$app(Props) {
                           })));
         }));
   React.useEffect((function () {
-          if (typeof appState === "number") {
-            if (appState === /* Start */0) {
-              setTimeout((function (param) {
-                      return Curry._1(setAppState, (function (param) {
-                                    return StateProvider.take(/* PairBeacon */0, param);
-                                  }));
-                    }), 16000);
-            }
-            
-          } else {
+          if (typeof appState !== "number") {
             switch (appState.TAG | 0) {
               case /* BeaconPaired */0 :
                   Curry._1(setAppState, (function (param) {

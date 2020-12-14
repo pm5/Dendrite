@@ -4,21 +4,51 @@ import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
 import * as Neighbor from "./core/Neighbor.bs.js";
 import * as Belt_Array from "bs-platform/lib/es6/belt_Array.js";
+import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
+import * as StateProvider from "./StateProvider.bs.js";
 
-var samples = [{
+var samples = [
+  {
     citizen: {
       id: "012",
-      infections: [],
+      infections: [{
+          pathogen: {
+            name: "COVID-22"
+          },
+          infectedAt: new Date(2020, 8, 15)
+        }],
       vaccinations: [],
       immunities: []
     },
     distanceInMeters: 3.0,
     measuredAt: new Date()
-  }];
+  },
+  {
+    citizen: {
+      id: "345",
+      infections: [],
+      vaccinations: [],
+      immunities: []
+    },
+    distanceInMeters: 1.5,
+    measuredAt: new Date()
+  },
+  {
+    citizen: {
+      id: "678",
+      infections: [],
+      vaccinations: [],
+      immunities: []
+    },
+    distanceInMeters: 2.0,
+    measuredAt: new Date()
+  }
+];
 
-function useMonitor(user) {
+function useMonitor(intervalOpt, user, setAppState) {
+  var interval = intervalOpt !== undefined ? intervalOpt : 4000;
   var match = React.useState(function () {
-        return [];
+        
       });
   var setNeighbors = match[1];
   var neighbors = match[0];
@@ -26,13 +56,17 @@ function useMonitor(user) {
         
       });
   var setDanger = match$1[1];
+  var danger = match$1[0];
   React.useEffect((function () {
-          var dangers = Neighbor.dangeredBy(user, neighbors);
-          if (dangers.length !== 0) {
-            Curry._1(setDanger, (function (param) {
-                    return Belt_Array.get(dangers, 0);
-                  }));
-          }
+          Belt_Option.map(neighbors, (function (neighbors) {
+                  var dangers = Neighbor.dangeredBy(user, neighbors);
+                  if (dangers.length !== 0) {
+                    return Curry._1(setDanger, (function (param) {
+                                  return Belt_Array.get(dangers, 0);
+                                }));
+                  }
+                  
+                }));
           return (function (param) {
                     return Curry._1(setDanger, (function (param) {
                                   
@@ -40,11 +74,32 @@ function useMonitor(user) {
                   });
         }), [neighbors]);
   React.useEffect((function () {
+          if (Belt_Option.isSome(neighbors)) {
+            if (danger !== undefined) {
+              var partial_arg_0 = danger[0];
+              var partial_arg_1 = danger[1];
+              var partial_arg = {
+                TAG: /* WarnUser */2,
+                _0: partial_arg_0,
+                _1: partial_arg_1
+              };
+              Curry._1(setAppState, (function (param) {
+                      return StateProvider.take(partial_arg, param);
+                    }));
+            } else {
+              Curry._1(setAppState, (function (param) {
+                      return StateProvider.take(/* StartMonitor */3, param);
+                    }));
+            }
+          }
+          
+        }), [danger]);
+  React.useEffect((function () {
           var job = setInterval((function (param) {
                   return Curry._1(setNeighbors, (function (param) {
                                 return samples;
                               }));
-                }), 10000);
+                }), interval);
           return (function (param) {
                     clearInterval(job);
                     
@@ -52,7 +107,8 @@ function useMonitor(user) {
         }), []);
   return [
           neighbors,
-          match$1[0]
+          danger,
+          setDanger
         ];
 }
 

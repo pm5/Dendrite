@@ -16,7 +16,15 @@ function LoadUserScreen(Props) {
                   var user_id = beacon.id;
                   var user_infections = [];
                   var user_vaccinations = [];
-                  var user_immunities = [];
+                  var user_immunities = [{
+                      antibody: {
+                        name: "SwineFlu-H",
+                        bindsTo: [{
+                            name: "SwineFlu-H"
+                          }]
+                      },
+                      expiresAt: new Date(2021, 1, 31)
+                    }];
                   var user = {
                     id: user_id,
                     infections: user_infections,

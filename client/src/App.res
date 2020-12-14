@@ -29,12 +29,6 @@ let app = () => {
 
   React.useEffect1(() => {
     switch appState {
-      | Start => {
-        Js.Global.setTimeout(() => {
-          setAppState(StateProvider.take(StateProvider.PairBeacon))
-        }, 16000)
-        |> ignore
-      }
       | BeaconPaired(_) => setAppState(StateProvider.take(StateProvider.LoadUser))
       | UserLoaded(_, _) => setAppState(StateProvider.take(StateProvider.StartMonitor))
       | _ => ()
