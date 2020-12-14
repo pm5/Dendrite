@@ -4,21 +4,8 @@ open ReactNative
 @react.component
 let make = () => {
   let (appState, setAppState) = StateProvider.useContext()
-  let (beacons, setBeacons) = React.useState(() => [])
+  let (beacons, _scanning, setScanning) = BeaconScanner.useScanner()
   let (selected: option<Beacon.t>, setSelected) = React.useState(() => None)
-
-  // XXX for tests
-  React.useEffect0(() => {
-    let _ = Js.Global.setTimeout(() => {
-      setBeacons(_ => [
-        { Beacon.id: "012" },
-        { Beacon.id: "345" },
-        { Beacon.id: "678" },
-        { Beacon.id: "abc" },
-      ])
-    }, 2000)
-    None
-  })
 
   let saveBeacon = beacon => {
     open Async
@@ -27,6 +14,11 @@ let make = () => {
   }
 
   let confirmSaved = () => setAppState(StateProvider.take(ConfirmBeaconSaved))
+
+  React.useEffect0(() => {
+    setScanning(_ => true)
+    Some(() => setScanning(_ => false) |> ignore)
+  })
 
   <>
     <View>

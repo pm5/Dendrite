@@ -1,5 +1,3 @@
-open Belt
-
 module AppScreen = {
   @react.component
   let make = () => {
@@ -19,13 +17,6 @@ module AppScreen = {
 @react.component
 let app = () => {
   let (appState, setAppState) = React.useState(() => StateProvider.Start)
-
-  {
-    open Async
-    Storage.loadBeacon()
-      ->then_(b => b->Option.map(beacon => Js.log(beacon.id))->async)
-      |> ignore
-  }
 
   React.useEffect1(() => {
     switch appState {

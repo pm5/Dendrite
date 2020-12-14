@@ -2,6 +2,7 @@
 
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
+import * as Beacon from "./core/Beacon.bs.js";
 import * as ReactNativeEddystone from "@lg2/react-native-eddystone";
 
 function useScanner(param) {
@@ -10,21 +11,12 @@ function useScanner(param) {
       });
   var scanning = match[0];
   var match$1 = React.useState(function () {
-        return {
-                beacons: [{
-                    id: "0",
-                    uid: "0x00",
-                    rssi: 0.1,
-                    txPower: 0.01
-                  }]
-              };
+        return [];
       });
   var setBeacons = match$1[1];
   var beaconListener = function (d) {
     return Curry._1(setBeacons, (function (beacons) {
-                  return {
-                          beacons: [d].concat(beacons.beacons).slice(0, 10)
-                        };
+                  return [Beacon.fromEddystone(d)].concat(beacons).slice(0, 10);
                 }));
   };
   React.useEffect((function () {

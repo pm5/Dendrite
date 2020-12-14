@@ -6,42 +6,20 @@ import * as React from "react";
 import * as $$Storage from "../Storage.bs.js";
 import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
 import * as ReactNative from "react-native";
+import * as BeaconScanner from "../BeaconScanner.bs.js";
 import * as StateProvider from "../StateProvider.bs.js";
 
 function PairBeaconScreen(Props) {
   var match = StateProvider.useContext(undefined);
   var setAppState = match[1];
   var appState = match[0];
-  var match$1 = React.useState(function () {
-        return [];
-      });
-  var setBeacons = match$1[1];
+  var match$1 = BeaconScanner.useScanner(undefined);
+  var setScanning = match$1[2];
   var match$2 = React.useState(function () {
         
       });
   var setSelected = match$2[1];
   var selected = match$2[0];
-  React.useEffect((function () {
-          setTimeout((function (param) {
-                  return Curry._1(setBeacons, (function (param) {
-                                return [
-                                        {
-                                          id: "012"
-                                        },
-                                        {
-                                          id: "345"
-                                        },
-                                        {
-                                          id: "678"
-                                        },
-                                        {
-                                          id: "abc"
-                                        }
-                                      ];
-                              }));
-                }), 2000);
-          
-        }), []);
   var saveBeacon = function (beacon) {
     return Async.then_($$Storage.saveBeacon(beacon), (function (param) {
                   var partial_arg = {
@@ -53,6 +31,17 @@ function PairBeaconScreen(Props) {
                                   })));
                 }));
   };
+  React.useEffect((function () {
+          Curry._1(setScanning, (function (param) {
+                  return true;
+                }));
+          return (function (param) {
+                    Curry._1(setScanning, (function (param) {
+                            return false;
+                          }));
+                    
+                  });
+        }), []);
   var tmp;
   tmp = typeof appState === "number" ? (
       appState === /* ScanningBeacon */1 && Belt_Option.isSome(selected) ? React.createElement(ReactNative.View, {

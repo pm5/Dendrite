@@ -12,7 +12,7 @@ function ScannerScreen(Props) {
   return React.createElement(ReactNative.View, {
               children: null
             }, React.createElement(BeaconList.make, {
-                  data: match[0].beacons
+                  data: match[0]
                 }), React.createElement(ReactNative.Button, {
                   onPress: (function (param) {
                       return Curry._1(setScanning, (function (s) {

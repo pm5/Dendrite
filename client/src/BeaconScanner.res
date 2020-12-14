@@ -1,19 +1,11 @@
 let useScanner = () => {
   let (scanning, setScanning) = React.useState(() => false)
-  let data : EddyStone.BeaconData.t =
-    { id: "0"
-    , uid : "0x00"
-    , rssi : 0.1
-    , txPower : 0.01,
-    }
-  let (beacons, setBeacons) = React.useState(() => { "beacons": [
-    data
-  ] })
+  let (beacons: array<Beacon.t>, setBeacons) = React.useState(() => [])
 
   let beaconListener = (d) => {
-    setBeacons(beacons => {
-      "beacons": beacons["beacons"]->Js.Array.concat([ d ])->Js.Array.slice(~start=0, ~end_=10)
-    })
+    setBeacons(beacons =>
+      beacons->Js.Array.concat([ d->Beacon.fromEddystone ])->Js.Array.slice(~start=0, ~end_=10)
+    )
   }
 
   React.useEffect1(() => {

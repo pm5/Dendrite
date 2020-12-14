@@ -2,12 +2,12 @@ open Belt
 open Async
 
 let saveBeacon = beacon =>
-  ReactNativeAsyncStorage.setItem("beacon_id", beacon.Beacon.id)
+  ReactNativeAsyncStorage.setItem("beacon", beacon->Beacon.toString)
 
 let loadBeacon = () =>
-  ReactNativeAsyncStorage.getItem("beacon_id")
+  ReactNativeAsyncStorage.getItem("beacon")
     ->then_(idOrNull =>
-        idOrNull->Js.Null.toOption->Option.map(id => { Beacon.id: id })->async
+        idOrNull->Js.Null.toOption->Option.map(Beacon.fromString)->async
       )
 
 let saveUser = user =>
