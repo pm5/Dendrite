@@ -2,62 +2,19 @@
 
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
-import * as Neighbor from "../core/Neighbor.bs.js";
+import * as Monitor from "../Monitor.bs.js";
 import * as Belt_Array from "bs-platform/lib/es6/belt_Array.js";
 import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
 import * as ReactNative from "react-native";
 import * as StateProvider from "../StateProvider.bs.js";
-
-var samples = [{
-    citizen: {
-      id: "012",
-      infections: [],
-      vaccinations: [],
-      immunities: []
-    },
-    distanceInMeters: 3.0,
-    measuredAt: new Date()
-  }];
 
 function MonitorScreen(Props) {
   var beacon = Props.beacon;
   var user = Props.user;
   var match = StateProvider.useContext(undefined);
   var setAppState = match[1];
-  var match$1 = React.useState(function () {
-        return [];
-      });
-  var setNeighbors = match$1[1];
-  var neighbors = match$1[0];
-  var match$2 = React.useState(function () {
-        
-      });
-  var setDanger = match$2[1];
-  var danger = match$2[0];
-  React.useEffect((function () {
-          var job = setInterval((function (param) {
-                  return Curry._1(setNeighbors, (function (param) {
-                                return samples;
-                              }));
-                }), 10000);
-          return (function (param) {
-                    clearInterval(job);
-                    
-                  });
-        }), []);
-  React.useEffect((function () {
-          var dangers = Neighbor.dangeredBy(user, neighbors);
-          if (dangers.length !== 0) {
-            Curry._1(setDanger, (function (param) {
-                    return Belt_Array.get(dangers, 0);
-                  }));
-          }
-          return (function (param) {
-                    return Curry._1(setDanger, (function (param) {
-                                  
-                                }));
-                  });
-        }), [neighbors]);
+  var match$1 = Monitor.useMonitor(user);
+  var danger = match$1[1];
   React.useEffect((function () {
           if (danger !== undefined) {
             var partial_arg_0 = danger[0];
@@ -84,7 +41,7 @@ function MonitorScreen(Props) {
                                                 TAG: /* WarningUser */5,
                                                 _0: beacon,
                                                 _1: user,
-                                                _2: Belt_Option.getExn(Belt_Array.get(samples, 0)),
+                                                _2: Belt_Option.getExn(Belt_Array.get(Monitor.samples, 0)),
                                                 _3: {
                                                   name: "foo"
                                                 }
@@ -98,8 +55,7 @@ function MonitorScreen(Props) {
 var make = MonitorScreen;
 
 export {
-  samples ,
   make ,
   
 }
-/* samples Not a pure module */
+/* react Not a pure module */
