@@ -41,7 +41,6 @@ function headers(airtable) {
 function pathogen(param) {
   return Json_decode.field("fields", (function (json) {
                 return {
-                        id: Json_decode.field("id", Json_decode.string, json),
                         name: Json_decode.field("name", Json_decode.string, json),
                         version: Json_decode.field("version", Json_decode.string, json),
                         spreadDistanceInMeters: Json_decode.field("spreadDistanceInMeters", Json_decode.$$float, json),
@@ -60,7 +59,6 @@ function pathogens(param) {
 function vaccine(param) {
   return Json_decode.field("fields", (function (json) {
                 return {
-                        id: Json_decode.field("id", Json_decode.string, json),
                         name: Json_decode.field("name", Json_decode.string, json),
                         version: Json_decode.field("version", Json_decode.string, json),
                         generates: Belt_Array.getExn(Json_decode.field("generates", (function (param) {
@@ -80,7 +78,6 @@ function vaccines(param) {
 function antibody(param) {
   return Json_decode.field("fields", (function (json) {
                 return {
-                        id: Json_decode.field("id", Json_decode.string, json),
                         name: Json_decode.field("name", Json_decode.string, json),
                         version: Json_decode.field("version", Json_decode.string, json),
                         bindsTo: Json_decode.field("bindsTo", (function (param) {
@@ -101,14 +98,23 @@ function citizen(param) {
   return Json_decode.field("fields", (function (json) {
                 return {
                         id: Json_decode.field("id", Json_decode.string, json),
-                        infections: Json_decode.field("infections", (function (param) {
-                                return Json_decode.array(Json_decode.string, param);
+                        name: Json_decode.withDefault("", (function (param) {
+                                return Json_decode.field("name", Json_decode.string, param);
                               }), json),
-                        vaccinations: Json_decode.field("vaccinations", (function (param) {
-                                return Json_decode.array(Json_decode.string, param);
+                        infections: Json_decode.withDefault([], (function (param) {
+                                return Json_decode.field("infections", (function (param) {
+                                              return Json_decode.array(Json_decode.string, param);
+                                            }), param);
                               }), json),
-                        immunities: Json_decode.field("immunities", (function (param) {
-                                return Json_decode.array(Json_decode.string, param);
+                        vaccinations: Json_decode.withDefault([], (function (param) {
+                                return Json_decode.field("vaccinations", (function (param) {
+                                              return Json_decode.array(Json_decode.string, param);
+                                            }), param);
+                              }), json),
+                        immunities: Json_decode.withDefault([], (function (param) {
+                                return Json_decode.field("immunities", (function (param) {
+                                              return Json_decode.array(Json_decode.string, param);
+                                            }), param);
                               }), json)
                       };
               }), param);

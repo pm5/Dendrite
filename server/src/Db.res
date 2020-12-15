@@ -29,8 +29,7 @@ module Decode = {
   open Json.Decode
 
   let pathogen = field("fields", json => {
-    GraphQL.Pathogen.id:    json |> field("id", string),
-    name:                   json |> field("name", string),
+    GraphQL.Pathogen.name:  json |> field("name", string),
     version:                json |> field("version", string),
     spreadDistanceInMeters: json |> field("spreadDistanceInMeters", Json.Decode.float),
     spreadTimeInSeconds:    json |> field("spreadTimeInSeconds", Json.Decode.float),
@@ -40,8 +39,7 @@ module Decode = {
   let pathogens = field("records", array(pathogen))
 
   let vaccine = field("fields", json => {
-    GraphQL.Vaccine.id:    json |> field("id", string),
-    name:                  json |> field("name", string),
+    GraphQL.Vaccine.name:  json |> field("name", string),
     version:               json |> field("version", string),
     generates:             (json |> field("generates", array(string)))->Array.getExn(0),
     effectiveAfterSeconds: json |> field("effectiveAfterSeconds", Json.Decode.float),
@@ -50,20 +48,20 @@ module Decode = {
   let vaccines = field("records", array(vaccine))
 
   let antibody = field("fields", json => {
-    GraphQL.Antibody.id: json |> field("id", string),
-    name:                json |> field("name", string),
-    version:             json |> field("version", string),
-    bindsTo:             json |> field("bindsTo", array(string))
-    expiresInSeconds:    json |> field("expiresInSeconds", Json.Decode.float),
+    GraphQL.Antibody.name: json |> field("name", string),
+    version:               json |> field("version", string),
+    bindsTo:               json |> field("bindsTo", array(string))
+    expiresInSeconds:      json |> field("expiresInSeconds", Json.Decode.float),
   })
 
   let antibodies = field("records", array(antibody))
 
   let citizen = field("fields", json => {
     GraphQL.Citizen.id: json |> field("id", string),
-    infections:         json |> field("infections", array(string)),
-    vaccinations:       json |> field("vaccinations", array(string)),
-    immunities:         json |> field("immunities", array(string)),
+    name:               json |> withDefault("", field("name", string)),
+    infections:         json |> withDefault([], field("infections", array(string))),
+    vaccinations:       json |> withDefault([], field("vaccinations", array(string))),
+    immunities:         json |> withDefault([], field("immunities", array(string))),
   })
 
   let citizens = field("records", array(citizen))

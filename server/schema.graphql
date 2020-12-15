@@ -1,8 +1,7 @@
 scalar DateTime
 
 type Pathogen {
-  id: ID!
-  name: String!
+  name: ID!
   version: String!
   spreadDistanceInMeters: Float!
   spreadTimeInSeconds: Float!
@@ -10,16 +9,14 @@ type Pathogen {
 }
 
 type Antibody {
-  id: ID!
-  name: String!
+  name: ID!
   version: String!
   bindsTo: [Pathogen!]!
   expiresInSeconds: Float!
 }
 
 type Vaccine {
-  id: ID!
-  name: String!
+  name: ID!
   version: String!
   generates: Antibody!
   effectiveAfterSeconds: Float!
@@ -42,12 +39,13 @@ type Immunity {
 
 type Citizen {
   id: ID!
+  name: String!
   infections: [Infection!]!
   vaccinations: [Vaccination!]!
   immunities: [Immunity!]!
 }
 
-input ProximityObservation {
+input Neighbor {
   citizen: ID!
   distanceInMeters: Float!
   measuredAt: DateTime!
@@ -55,13 +53,12 @@ input ProximityObservation {
 
 type Query {
   allCitizens: [Citizen!]!
-  citizen(id: ID): Citizen
+  citizen(id: ID!): Citizen
   allPathogens: [Pathogen!]!
   allVaccines: [Vaccine!]!
   allAntibodies: [Antibody!]!
 }
 
 type Mutation {
-  reportNeighbors(citizen: ID!, neighbors: [ProximityObservation!]!): [Citizen!]!
-  vaccinate(citizen: ID!, vaccine: ID!): Citizen
+  reportNeighbors(citizen: ID!, neighbors: [Neighbor!]!): [Citizen!]!
 }

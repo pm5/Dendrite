@@ -2,8 +2,7 @@
 module Pathogen = {
   type id = string
   type t = {
-    id: id
-    name: string
+    name: id
     version: string
     spreadDistanceInMeters: float
     spreadTimeInSeconds: float
@@ -14,8 +13,7 @@ module Pathogen = {
 module Antibody = {
   type id = string
   type t = {
-    id: id
-    name: string
+    name: id
     version: string
     bindsTo: array<Pathogen.id>
     expiresInSeconds: float
@@ -25,8 +23,7 @@ module Antibody = {
 module Vaccine = {
   type id = string
   type t = {
-    id: id
-    name: string
+    name: id
     version: string
     generates: Antibody.id
     effectiveAfterSeconds: float
@@ -61,6 +58,7 @@ module Citizen = {
   type id = string
   type t = {
     id: id
+    name: string
     infections: array<Infection.id>
     vaccinations: array<Vaccination.id>
     immunities: array<Immunity.id>
@@ -117,4 +115,3 @@ module Resolvers = {
     @bs.as("Citizen") citizen: citizeQuery
   }
 }
-
