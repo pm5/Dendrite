@@ -1,3 +1,4 @@
+/*
 let useScanner = () => {
   let (scanning, setScanning) = React.useState(() => false)
   let (beacons: array<Beacon.t>, setBeacons) = React.useState(() => [])
@@ -19,3 +20,7 @@ let useScanner = () => {
 
   (beacons, scanning, setScanning)
 }
+*/
+
+@bs.module("./IBeacon")
+external useScanner : unit => (array<Beacon.t>, bool, (bool => bool) => ()) = "useScanner"

@@ -19,6 +19,7 @@
     "bs-fetch": "^0.6.2",
     "react": "^16.14.0",
     "react-native": "^0.62.0",
+    "react-native-beacons-manager": "git+https://github.com/MacKentoch/react-native-beacons-manager.git",
     "reason-react": "^0.9.0",
     "reason-react-native": "^0.62.0"
   },

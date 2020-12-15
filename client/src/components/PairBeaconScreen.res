@@ -4,7 +4,7 @@ open ReactNative
 @react.component
 let make = () => {
   let (appState, setAppState) = StateProvider.useContext()
-  let (beacons, _scanning, setScanning) = BeaconScanner.useScanner()
+  let (beacons, scanning, setScanning) = BeaconScanner.useScanner()
   let (selected: option<Beacon.t>, setSelected) = React.useState(() => None)
 
   let saveBeacon = beacon => {
@@ -22,7 +22,7 @@ let make = () => {
 
   <>
     <View>
-      <Text>{"Pairing beacon"->React.string}</Text>
+      <Text>{(scanning ? "Pairing beacon" : "Not scanning")->React.string}</Text>
       {
         switch appState {
           | StateProvider.ScanningBeacon when selected->Option.isSome => {

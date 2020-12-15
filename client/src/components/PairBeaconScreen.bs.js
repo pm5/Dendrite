@@ -81,7 +81,7 @@ function PairBeaconScreen(Props) {
   return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
                   children: null
                 }, React.createElement(ReactNative.Text, {
-                      children: "Pairing beacon"
+                      children: match$1[1] ? "Pairing beacon" : "Not scanning"
                     }), tmp, React.createElement(ReactNative.FlatList, {
                       data: match$1[0],
                       keyExtractor: (function (beacon, param) {
