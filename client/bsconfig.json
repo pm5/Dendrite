@@ -19,8 +19,10 @@
     "reason-react",
     "reason-react-native",
     "bs-fetch",
+    "decco",
     "@reason-react-native/async-storage"
   ],
+  "ppx-flags": ["decco/ppx"],
   "warnings": {
     "number": "-48"
   }

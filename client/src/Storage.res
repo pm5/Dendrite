@@ -12,6 +12,7 @@ let loadBeacon = () =>
 
 let saveUser = user =>
   ReactNativeAsyncStorage.setItem("user", user->Citizen.toString)
+
 let loadUser = () =>
   ReactNativeAsyncStorage.getItem("user")
     ->then_(idOrNull =>
