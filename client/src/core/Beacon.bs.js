@@ -2,15 +2,6 @@
 
 import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
 
-function fromEddystone(b) {
-  return {
-          id: b.id,
-          uid: b.uid,
-          rssi: b.rssi,
-          txPower: b.txPower
-        };
-}
-
 function toString(beacon) {
   return Belt_Option.getExn(JSON.stringify(beacon));
 }
@@ -20,7 +11,6 @@ function fromString(prim) {
 }
 
 export {
-  fromEddystone ,
   toString ,
   fromString ,
   

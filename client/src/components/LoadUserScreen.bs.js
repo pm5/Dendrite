@@ -13,7 +13,7 @@ function LoadUserScreen(Props) {
   var setAppState = match[1];
   React.useEffect((function () {
           setTimeout((function (param) {
-                  var user_id = beacon.id;
+                  var user_id = String(beacon.minor);
                   var user_infections = [];
                   var user_vaccinations = [];
                   var user_immunities = [{
@@ -46,7 +46,7 @@ function LoadUserScreen(Props) {
         }), []);
   return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
                   children: React.createElement(ReactNative.Text, {
-                        children: "Loading user data from beacon " + beacon.id
+                        children: "Loading user data from beacon " + String(beacon.minor)
                       })
                 }));
 }

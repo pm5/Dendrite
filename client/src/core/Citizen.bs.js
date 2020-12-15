@@ -6,11 +6,11 @@ function query(id) {
   return "\n  citizen(id: " + id + ") {\n    id\n    infections { pathogen { name } }\n    vaccinations { vaccine { name } }\n    immunities { antibody { name, bindsTo { name } } expiresAt }\n  }\n";
 }
 
-function to_string(user) {
+function toString(user) {
   return Belt_Option.getExn(JSON.stringify(user));
 }
 
-function from_string(prim) {
+function fromString(prim) {
   return JSON.parse(prim);
 }
 
@@ -19,8 +19,8 @@ var queryAll = "\n  allCitizens {\n    id\n    infections { pathogen { name } }\
 export {
   query ,
   queryAll ,
-  to_string ,
-  from_string ,
+  toString ,
+  fromString ,
   
 }
 /* No side effect */

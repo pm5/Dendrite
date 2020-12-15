@@ -48,7 +48,7 @@ function PairBeaconScreen(Props) {
               children: null
             }, React.createElement(ReactNative.Text, {
                   children: "Going to pair with " + Belt_Option.getWithDefault(Belt_Option.map(selected, (function (beacon) {
-                              return beacon.id;
+                              return String(beacon.minor);
                             })), "")
                 }), React.createElement(ReactNative.Button, {
                   onPress: (function (param) {
@@ -68,7 +68,7 @@ function PairBeaconScreen(Props) {
       appState.TAG === /* BeaconSaved */2 ? React.createElement(ReactNative.View, {
               children: null
             }, React.createElement(ReactNative.Text, {
-                  children: "Paired with " + appState._0.id
+                  children: "Paired with " + String(appState._0.minor)
                 }), React.createElement(ReactNative.Button, {
                   onPress: (function (param) {
                       return Curry._1(setAppState, (function (param) {
@@ -85,16 +85,15 @@ function PairBeaconScreen(Props) {
                     }), tmp, React.createElement(ReactNative.FlatList, {
                       data: match$1[0],
                       keyExtractor: (function (beacon, param) {
-                          return beacon.id;
+                          return String(beacon.minor);
                         }),
                       renderItem: (function (param) {
                           var item = param.item;
                           return React.createElement(ReactNative.View, {
                                       children: null,
-                                      key: item.id
+                                      key: String(item.minor)
                                     }, React.createElement(ReactNative.Text, {
-                                          children: item.id,
-                                          key: item.id
+                                          children: String(item.minor)
                                         }), React.createElement(ReactNative.Button, {
                                           onPress: (function (param) {
                                               return Curry._1(setSelected, (function (param) {

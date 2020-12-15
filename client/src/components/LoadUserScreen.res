@@ -1,3 +1,4 @@
+open Belt
 open ReactNative
 
 @react.component
@@ -8,7 +9,7 @@ let make = (~beacon) => {
     // XXX for tests
     let _ = Js.Global.setTimeout(() => {
       let user = {
-        Citizen.id: beacon.Beacon.id,
+        Citizen.id: beacon.Beacon.minor->Int.toString,
         infections: [],
         vaccinations: [],
         immunities: [
@@ -27,7 +28,7 @@ let make = (~beacon) => {
 
   <>
     <View>
-      <Text>{("Loading user data from beacon " ++ beacon.Beacon.id)->React.string}</Text>
+      <Text>{("Loading user data from beacon " ++ beacon.Beacon.minor->Int.toString)->React.string}</Text>
     </View>
   </>
 }

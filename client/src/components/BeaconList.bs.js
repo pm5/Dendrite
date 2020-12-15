@@ -15,11 +15,13 @@ function BeaconList(Props) {
                   return React.createElement(ReactNative.View, {
                               children: null
                             }, React.createElement(ReactNative.Text, {
-                                  children: item.uid
+                                  children: item.uuid
                                 }), React.createElement(ReactNative.Text, {
-                                  children: item.rssi.toString()
+                                  children: String(item.major)
                                 }), React.createElement(ReactNative.Text, {
-                                  children: item.txPower.toString()
+                                  children: String(item.minor)
+                                }), React.createElement(ReactNative.Text, {
+                                  children: item.distance.toString()
                                 }));
                 })
             });

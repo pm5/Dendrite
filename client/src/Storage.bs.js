@@ -18,12 +18,12 @@ function loadBeacon(param) {
 }
 
 function saveUser(user) {
-  return AsyncStorage.default.setItem("user", Citizen.to_string(user));
+  return AsyncStorage.default.setItem("user", Citizen.toString(user));
 }
 
 function loadUser(param) {
   return Async.then_(AsyncStorage.default.getItem("user"), (function (idOrNull) {
-                return Async.async(Belt_Option.map(idOrNull === null ? undefined : Caml_option.some(idOrNull), Citizen.from_string));
+                return Async.async(Belt_Option.map(idOrNull === null ? undefined : Caml_option.some(idOrNull), Citizen.fromString));
               }));
 }
 

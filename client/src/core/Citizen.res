@@ -26,5 +26,5 @@ let queryAll = "
 `
 "
 
-let to_string = user => user->Js.Json.stringifyAny->Option.getExn
-let from_string = Js.Json.parseExn
+let toString = user => user->Js.Json.stringifyAny->Option.getExn
+let fromString = Js.Json.parseExn

@@ -27,14 +27,14 @@ let make = () => {
         switch appState {
           | StateProvider.ScanningBeacon when selected->Option.isSome => {
             <View>
-              <Text>{("Going to pair with " ++ selected->Option.map(beacon => beacon.id)->Option.getWithDefault(""))->React.string}</Text>
+              <Text>{("Going to pair with " ++ selected->Option.map(beacon => beacon.minor->Int.toString)->Option.getWithDefault(""))->React.string}</Text>
               <Button title="Yes" onPress={_ => selected->Option.map(saveBeacon) |> ignore} />
               <Button title="No" onPress={_ => setSelected(_ => None)} />
             </View>
           }
           | StateProvider.BeaconSaved(beacon) => {
             <View>
-              <Text>{("Paired with " ++ beacon.id)->React.string}</Text>
+              <Text>{("Paired with " ++ beacon.minor->Int.toString)->React.string}</Text>
               <Button title="Proceed" onPress={_ => confirmSaved()} />
             </View>
           }
@@ -44,15 +44,15 @@ let make = () => {
       <FlatList
         data=beacons
         renderItem={({ VirtualizedList.item, _ }) =>
-            <View key=item.id>
-              <Text key=item.id>{ item.id->React.string }</Text>
+            <View key={item.minor->Int.toString}>
+              <Text>{ item.minor->Int.toString->React.string }</Text>
               <Button
                 title="Select"
                 onPress={_ => setSelected(_ => Some(item))}
                 />
             </View>
         }
-        keyExtractor={(beacon, _) => beacon.id}
+        keyExtractor={(beacon, _) => beacon.minor->Int.toString}
         />
     </View>
   </>
