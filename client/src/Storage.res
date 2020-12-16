@@ -6,15 +6,27 @@ let saveBeacon = beacon =>
 
 let loadBeacon = () =>
   ReactNativeAsyncStorage.getItem("beacon")
-    ->then_(idOrNull =>
-        idOrNull->Js.Null.toOption->Option.map(Beacon.fromString)->async
+    ->then_(dataOrNull =>
+        dataOrNull
+          ->Js.Null.toOption
+          ->Option.flatMap(Beacon.fromString)
+          ->async
       )
+
+let resetBeacon = () =>
+  ReactNativeAsyncStorage.setItem("beacon", "")
 
 let saveUser = user =>
   ReactNativeAsyncStorage.setItem("user", user->Citizen.toString)
 
 let loadUser = () =>
   ReactNativeAsyncStorage.getItem("user")
-    ->then_(idOrNull =>
-        idOrNull->Js.Null.toOption->Option.map(Citizen.fromString)->async
+    ->then_(dataOrNull =>
+        dataOrNull
+          ->Js.Null.toOption
+          ->Option.flatMap(Citizen.fromString)
+          ->async
       )
+
+let resetUser = () =>
+  ReactNativeAsyncStorage.setItem("user", "")

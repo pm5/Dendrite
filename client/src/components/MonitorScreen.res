@@ -1,8 +1,17 @@
 open Belt
 open ReactNative
 
+let reset = (setAppState) => {
+  open Async
+  Storage.resetBeacon()
+    ->then_(() => Storage.resetUser())
+    ->then_(() => setAppState(_ => StateProvider.Start)->async)
+    ->ignore
+}
+
 @react.component
 let make = (~beacon as _, ~user) => {
+  let (_, setAppState) = StateProvider.useContext()
   let (neighbors, danger, _setDanger) = Monitor.useMonitor(user)
 
   <>
@@ -15,6 +24,10 @@ let make = (~beacon as _, ~user) => {
           | None => "No danger"
         }->React.string
       }</Text>
+      <Button
+        onPress={_ => reset(setAppState)}
+        title="Reset"
+        />
     </View>
   </>
 }

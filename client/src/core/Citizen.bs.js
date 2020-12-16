@@ -253,8 +253,12 @@ function toString(user) {
   return Belt_Option.getExn(JSON.stringify(user));
 }
 
-function fromString(prim) {
-  return JSON.parse(prim);
+function fromString(str) {
+  var citizen = t_decode(JSON.parse(str));
+  if (citizen.TAG === /* Ok */0) {
+    return citizen._0;
+  }
+  
 }
 
 export {

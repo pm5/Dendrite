@@ -26,6 +26,20 @@ let app = () => {
     None
   }, [appState])
 
+  React.useEffect0(() => {
+    open Async
+    Storage.loadBeacon()->then_(beacon => {
+      Storage.loadUser()->then_(user => {
+        switch (beacon, user) {
+          | (None, _) => setAppState(_ => StateProvider.Start)
+          | (Some(beacon), None) => setAppState(_ => StateProvider.LoadingUser(beacon))
+          | (Some(beacon), Some(user)) => setAppState(_ => StateProvider.Monitoring(beacon, user))
+        }->async
+      })
+    })->ignore
+    None
+  })
+
   <>
     <StateProvider value=(appState, setAppState)>
       <AppScreen />

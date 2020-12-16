@@ -12,9 +12,13 @@ function saveBeacon(beacon) {
 }
 
 function loadBeacon(param) {
-  return Async.then_(AsyncStorage.default.getItem("beacon"), (function (idOrNull) {
-                return Async.async(Belt_Option.map(idOrNull === null ? undefined : Caml_option.some(idOrNull), Beacon.fromString));
+  return Async.then_(AsyncStorage.default.getItem("beacon"), (function (dataOrNull) {
+                return Async.async(Belt_Option.flatMap(dataOrNull === null ? undefined : Caml_option.some(dataOrNull), Beacon.fromString));
               }));
+}
+
+function resetBeacon(param) {
+  return AsyncStorage.default.setItem("beacon", "");
 }
 
 function saveUser(user) {
@@ -22,16 +26,22 @@ function saveUser(user) {
 }
 
 function loadUser(param) {
-  return Async.then_(AsyncStorage.default.getItem("user"), (function (idOrNull) {
-                return Async.async(Belt_Option.map(idOrNull === null ? undefined : Caml_option.some(idOrNull), Citizen.fromString));
+  return Async.then_(AsyncStorage.default.getItem("user"), (function (dataOrNull) {
+                return Async.async(Belt_Option.flatMap(dataOrNull === null ? undefined : Caml_option.some(dataOrNull), Citizen.fromString));
               }));
+}
+
+function resetUser(param) {
+  return AsyncStorage.default.setItem("user", "");
 }
 
 export {
   saveBeacon ,
   loadBeacon ,
+  resetBeacon ,
   saveUser ,
   loadUser ,
+  resetUser ,
   
 }
 /* @react-native-community/async-storage Not a pure module */

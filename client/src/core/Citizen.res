@@ -59,4 +59,8 @@ type all_result = {
 }
 
 let toString = (user: t) => user->Js.Json.stringifyAny->Option.getExn
-let fromString = Js.Json.parseExn
+let fromString = str =>
+  switch (str->Js.Json.parseExn->t_decode) {
+    | Ok(citizen) => Some(citizen)
+    | Error(_) => None
+  }
