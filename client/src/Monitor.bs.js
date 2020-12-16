@@ -11,7 +11,7 @@ import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
 import * as BeaconScanner from "./BeaconScanner.bs.js";
 import * as Belt_HashMapString from "bs-platform/lib/es6/belt_HashMapString.js";
 
-function useNeighbors(param) {
+function useNeighbors(user) {
   var match = React.useState(function () {
         return Belt_HashMapString.make(30);
       });
@@ -38,10 +38,33 @@ function useNeighbors(param) {
                   return Async.async((console.log(err), undefined));
                 }));
           
-        }), [beacons]);
+        }), []);
+  React.useEffect((function () {
+          var task = setInterval((function (param) {
+                  Async.$$catch(Async.then_(Db.allCitizens(undefined), (function (citizens) {
+                              return Async.async(Curry._1(setAllCitizens, (function (param) {
+                                                return Belt_HashMapString.fromArray(Belt_Array.map(citizens, (function (citizen) {
+                                                                  return [
+                                                                          citizen.id,
+                                                                          citizen
+                                                                        ];
+                                                                })));
+                                              })));
+                            })), (function (err) {
+                          return Async.async((console.log(err), undefined));
+                        }));
+                  
+                }), 60000);
+          return (function (param) {
+                    clearInterval(task);
+                    
+                  });
+        }), []);
   React.useEffect((function () {
           Curry._1(setNeighbors, (function (param) {
-                  return Belt_Array.keepMap(beacons, (function (beacon) {
+                  return Belt_Array.keepMap(Belt_Array.keep(beacons, (function (beacon) {
+                                    return Beacon.toCitizenId(beacon) !== user.id;
+                                  })), (function (beacon) {
                                 return Belt_Option.map(Belt_HashMapString.get(allCitizens, Beacon.toCitizenId(beacon)), (function (citizen) {
                                               return {
                                                       citizen: citizen,
@@ -70,7 +93,7 @@ function useNeighbors(param) {
 }
 
 function useMonitor(user) {
-  var neighbors = useNeighbors(undefined);
+  var neighbors = useNeighbors(user);
   var match = React.useState(function () {
         
       });
