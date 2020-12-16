@@ -2,7 +2,6 @@
 
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
-import * as WarnScreen from "./components/WarnScreen.bs.js";
 import * as StartScreen from "./components/StartScreen.bs.js";
 import * as MonitorScreen from "./components/MonitorScreen.bs.js";
 import * as StateProvider from "./StateProvider.bs.js";
@@ -26,14 +25,6 @@ function App$AppScreen(Props) {
           tmp = React.createElement(MonitorScreen.make, {
                 beacon: state._0,
                 user: state._1
-              });
-          break;
-      case /* WarningUser */5 :
-          tmp = React.createElement(WarnScreen.make, {
-                beacon: state._0,
-                user: state._1,
-                neighbor: state._2,
-                pathogen: state._3
               });
           break;
       default:

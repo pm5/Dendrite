@@ -22,6 +22,12 @@ export function useScanner() {
         .then(() => Beacons.startRangingBeaconsInRegion(region))
         .then(() => console.log(`Beacons ranging started succesfully!`))
         .catch(e => console.error(`Beacons ranging not started, error: ${error}`))
+    } else {
+      DeviceEventEmitter.removeListener('beaconsDidRange', updateBeacons)
+      Beacons.stopRangingBeaconsInRegion(region)
+        .then(() => console.log(`Beacons ranging stopped succesfully!`))
+        .then(() => Beacons.removeIBeaconsDetection())
+        .catch(e => console.error(`Beacons ranging not stopped, error: ${e}`))
     }
 
     return () => {

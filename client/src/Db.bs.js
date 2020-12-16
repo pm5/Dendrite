@@ -8,22 +8,35 @@ import * as Caml_option from "bs-platform/lib/es6/caml_option.js";
 
 var endpoint = "https://uitc.pominwu.org/";
 
+function postQuery(query) {
+  return fetch(endpoint, Fetch.RequestInit.make(/* Post */2, {
+                    "Content-Type": "application/json"
+                  }, Caml_option.some(query), undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined)(undefined));
+}
+
 function citizen(id) {
-  return Async.then_(Async.then_(fetch(endpoint, Fetch.RequestInit.make(/* Post */2, {
-                            "Content-Type": "application/json"
-                          }, Caml_option.some(Citizen.one(id)), undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined)(undefined)), (function (prim) {
-                    return prim.json();
-                  })), (function (json) {
-                return Async.async(Belt_Result.getExn(Citizen.one_result_decode(json)));
+  return Async.then_(Async.then_(Async.then_(postQuery(Citizen.one(id)), (function (prim) {
+                        return prim.json();
+                      })), (function (json) {
+                    return Async.async(Belt_Result.getExn(Citizen.one_result_decode(json)));
+                  })), (function (data) {
+                return Async.async(data.data.citizen);
               }));
 }
 
 function allCitizens(param) {
-  return [];
+  return Async.then_(Async.then_(Async.then_(postQuery(Citizen.all(undefined)), (function (prim) {
+                        return prim.json();
+                      })), (function (json) {
+                    return Async.async(Belt_Result.getExn(Citizen.all_result_decode(json)));
+                  })), (function (data) {
+                return Async.async(data.data.allCitizens);
+              }));
 }
 
 export {
   endpoint ,
+  postQuery ,
   citizen ,
   allCitizens ,
   

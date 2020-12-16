@@ -6,10 +6,16 @@ import * as Js_json from "bs-platform/lib/es6/js_json.js";
 import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
 
 function t_encode(v) {
-  return Js_dict.fromArray([[
+  return Js_dict.fromArray([
+              [
                 "name",
                 Decco.stringToJson(v.name)
-              ]]);
+              ],
+              [
+                "spreadDistanceInMeters",
+                Decco.floatToJson(v.spreadDistanceInMeters)
+              ]
+            ]);
 }
 
 function t_decode(v) {
@@ -20,22 +26,36 @@ function t_decode(v) {
   if (dict.TAG !== /* JSONObject */2) {
     return Decco.error(undefined, "Not an object", v);
   }
-  var name = Decco.stringFromJson(Belt_Option.getWithDefault(Js_dict.get(dict._0, "name"), null));
+  var dict$1 = dict._0;
+  var name = Decco.stringFromJson(Belt_Option.getWithDefault(Js_dict.get(dict$1, "name"), null));
   if (name.TAG === /* Ok */0) {
+    var spreadDistanceInMeters = Decco.floatFromJson(Belt_Option.getWithDefault(Js_dict.get(dict$1, "spreadDistanceInMeters"), null));
+    if (spreadDistanceInMeters.TAG === /* Ok */0) {
+      return {
+              TAG: /* Ok */0,
+              _0: {
+                name: name._0,
+                spreadDistanceInMeters: spreadDistanceInMeters._0
+              }
+            };
+    }
+    var e = spreadDistanceInMeters._0;
     return {
-            TAG: /* Ok */0,
+            TAG: /* Error */1,
             _0: {
-              name: name._0
+              path: ".spreadDistanceInMeters" + e.path,
+              message: e.message,
+              value: e.value
             }
           };
   }
-  var e = name._0;
+  var e$1 = name._0;
   return {
           TAG: /* Error */1,
           _0: {
-            path: ".name" + e.path,
-            message: e.message,
-            value: e.value
+            path: ".name" + e$1.path,
+            message: e$1.message,
+            value: e$1.value
           }
         };
 }

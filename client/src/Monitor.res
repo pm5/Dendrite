@@ -1,46 +1,54 @@
 open Belt
 
-// XXX for tests
-let samples: array<Neighbor.t> = [
-  {
-    Neighbor.citizen: {
-      id: "012",
-      infections: [
-        {
-          pathogen: { name: "COVID-22" },
-          infectedAt: Js.Date.makeWithYMD(~year=2020., ~month=8., ~date=15., ()),
-        }
-      ],
-      vaccinations: [],
-      immunities: [],
-    },
-    distanceInMeters: 3.0,
-    measuredAt: Js.Date.make(),
-  },
-  {
-    citizen: {
-      id: "345",
-      infections: [],
-      vaccinations: [],
-      immunities: [],
-    },
-    distanceInMeters: 1.5,
-    measuredAt: Js.Date.make(),
-  },
-  {
-    citizen: {
-      id: "678",
-      infections: [],
-      vaccinations: [],
-      immunities: [],
-    },
-    distanceInMeters: 2.0,
-    measuredAt: Js.Date.make(),
-  }
-]
-
-let useMonitor = (~interval=4000, user, setAppState) => {
+let useNeighbors = () => {
+  let (allCitizens: HashMap.String.t<Citizen.t>, setAllCitizens) = React.useState(
+    () => HashMap.String.make(~hintSize=30)
+  )
+  let (beacons, _scanning, setScanning) = BeaconScanner.useScanner()
   let (neighbors: option<array<Neighbor.t>>, setNeighbors) = React.useState(() => None)
+
+  React.useEffect1(() => {
+    open Async
+    Db.allCitizens()
+      ->then_(citizens => {
+        setAllCitizens(_ => {
+          citizens
+            ->Array.map(citizen => (citizen.id, citizen))
+            ->HashMap.String.fromArray
+        })->async
+      })
+      ->catch(err => Js.log(err)->async)
+      ->ignore
+    None
+  }, [beacons])
+
+  React.useEffect2(() => {
+    setNeighbors(_ => {
+      let neighbors = beacons
+        ->Array.keepMap(beacon =>
+          allCitizens
+            ->HashMap.String.get(beacon->Beacon.toCitizenId)
+            ->Option.map(citizen => {
+              Neighbor.citizen: citizen,
+              distanceInMeters: beacon.Beacon.distance,
+              measuredAt: Js.Date.make(),
+            })
+        )
+      Some(neighbors)
+    })
+    None
+  }, (allCitizens, beacons))
+
+  React.useEffect0(() => {
+    setScanning(_ => true)
+    Some(_ => setScanning(_ => false))
+  })
+
+  (neighbors)
+}
+
+let useMonitor = (user) => {
+  let (neighbors) = useNeighbors()
   let (danger: option<(Neighbor.t, Pathogen.t)>, setDanger) = React.useState(() => None)
 
   React.useEffect1(() => {
@@ -48,29 +56,12 @@ let useMonitor = (~interval=4000, user, setAppState) => {
       let dangers = user->Neighbor.dangeredBy(neighbors)
       if dangers->Array.length > 0 {
         // XXX POST report
+        Js.log(dangers->Array.get(0))
         setDanger(_ => dangers->Array.get(0))
       }
     }) |> ignore
     Some(() => setDanger(_ => None))
   }, [neighbors])
-
-  React.useEffect1(() => {
-    if neighbors->Option.isSome {
-      switch danger {
-        | Some(neighbor, pathogen) => setAppState(StateProvider.take(StateProvider.WarnUser(neighbor, pathogen)))
-        | None => setAppState(StateProvider.take(StateProvider.StartMonitor))
-      }
-    }
-    None
-  }, [danger])
-
-  // XXX for tets
-  React.useEffect0(() => {
-    let job = Js.Global.setInterval(() => {
-      setNeighbors(_ => Some(samples))
-    }, interval)
-    Some(() => Js.Global.clearInterval(job))
-  })
 
   (neighbors, danger, setDanger)
 }

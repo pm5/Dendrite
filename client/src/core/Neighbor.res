@@ -13,6 +13,7 @@ let dangeredBy = (user, neighbors: array<t>) => {
   let danger = (immunes, stranger: t) => {
     stranger.citizen.Citizen.infections
       ->Array.keep(inf => !(immunes->Array.some(immune => immune == inf.pathogen.name)))
+      ->Array.keep(inf => stranger.distanceInMeters < inf.pathogen.spreadDistanceInMeters)
       ->Array.map(inf => (stranger, inf.pathogen))
   }
 

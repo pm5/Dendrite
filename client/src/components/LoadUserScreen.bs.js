@@ -4,6 +4,7 @@ import * as Db from "../Db.bs.js";
 import * as Async from "../Async.bs.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
+import * as Beacon from "../core/Beacon.bs.js";
 import * as $$Storage from "../Storage.bs.js";
 import * as ReactNative from "react-native";
 import * as StateProvider from "../StateProvider.bs.js";
@@ -13,9 +14,8 @@ function LoadUserScreen(Props) {
   var match = StateProvider.useContext(undefined);
   var setAppState = match[1];
   React.useEffect((function () {
-          var id = String(beacon.minor);
-          Async.$$catch(Async.then_(Async.then_(Db.citizen(id), (function (data) {
-                          var user = data.data.citizen;
+          var id = Beacon.toCitizenId(beacon);
+          Async.$$catch(Async.then_(Async.then_(Db.citizen(id), (function (user) {
                           return Async.then_($$Storage.saveUser(user), (function (param) {
                                         return Async.async(user);
                                       }));
@@ -34,7 +34,7 @@ function LoadUserScreen(Props) {
         }), []);
   return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
                   children: React.createElement(ReactNative.Text, {
-                        children: "Loading user data from beacon " + String(beacon.minor)
+                        children: "Loading user data from beacon " + Beacon.toCitizenId(beacon)
                       })
                 }));
 }

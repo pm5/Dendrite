@@ -17,9 +17,9 @@ let one = id => {
     {
       citizen(id: "${id}") {
         id
-        infections { pathogen { name }, infectedAt }
+        infections { pathogen { name, spreadDistanceInMeters }, infectedAt }
         vaccinations { vaccine { name }, adminedAt }
-        immunities { antibody { name, bindsTo { name } } expiresAt }
+        immunities { antibody { name, bindsTo { name, spreadDistanceInMeters } } expiresAt }
       }
     }
     `
@@ -35,16 +35,18 @@ type one_result = {
   data: one
 }
 
-let all = "
-{
-  allCitizens {
-    id
-    infections { pathogen { name }, infectedAt }
-    vaccinations { vaccine { name }, adminedAt }
-    immunities { antibody { name, bindsTo { name } } expiresAt }
-  }
-}
-"
+let all = () => {
+  query: `
+    {
+      allCitizens {
+        id
+        infections { pathogen { name, spreadDistanceInMeters }, infectedAt }
+        vaccinations { vaccine { name }, adminedAt }
+        immunities { antibody { name, bindsTo { name, spreadDistanceInMeters } } expiresAt }
+      }
+    }
+  `
+}->Js.Json.stringifyAny->Option.getExn
 
 @decco
 type all = {

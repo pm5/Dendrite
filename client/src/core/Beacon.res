@@ -11,3 +11,4 @@ type t = {
 
 let toString = beacon => beacon->Js.Json.stringifyAny->Option.getExn
 let fromString = Js.Json.parseExn
+let toCitizenId = beacon => beacon.minor->Int.toString

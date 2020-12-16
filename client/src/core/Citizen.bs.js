@@ -99,7 +99,7 @@ function t_decode(v) {
 
 function one(id) {
   return Belt_Option.getExn(JSON.stringify({
-                  query: "\n    {\n      citizen(id: \"" + id + "\") {\n        id\n        infections { pathogen { name }, infectedAt }\n        vaccinations { vaccine { name }, adminedAt }\n        immunities { antibody { name, bindsTo { name } } expiresAt }\n      }\n    }\n    "
+                  query: "\n    {\n      citizen(id: \"" + id + "\") {\n        id\n        infections { pathogen { name, spreadDistanceInMeters }, infectedAt }\n        vaccinations { vaccine { name }, adminedAt }\n        immunities { antibody { name, bindsTo { name, spreadDistanceInMeters } } expiresAt }\n      }\n    }\n    "
                 }));
 }
 
@@ -171,6 +171,12 @@ function one_result_decode(v) {
             value: e.value
           }
         };
+}
+
+function all(param) {
+  return Belt_Option.getExn(JSON.stringify({
+                  query: "\n    {\n      allCitizens {\n        id\n        infections { pathogen { name, spreadDistanceInMeters }, infectedAt }\n        vaccinations { vaccine { name }, adminedAt }\n        immunities { antibody { name, bindsTo { name, spreadDistanceInMeters } } expiresAt }\n      }\n    }\n  "
+                }));
 }
 
 function all_encode(v) {
@@ -250,8 +256,6 @@ function toString(user) {
 function fromString(prim) {
   return JSON.parse(prim);
 }
-
-var all = "\n{\n  allCitizens {\n    id\n    infections { pathogen { name }, infectedAt }\n    vaccinations { vaccine { name }, adminedAt }\n    immunities { antibody { name, bindsTo { name } } expiresAt }\n  }\n}\n";
 
 export {
   t_encode ,

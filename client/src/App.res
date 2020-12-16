@@ -8,7 +8,6 @@ module AppScreen = {
         | ScanningBeacon | BeaconSaved(_) | BeaconPaired(_) => <PairBeaconScreen />
         | LoadingUser(beacon) | UserLoaded(beacon, _) => <LoadUserScreen beacon />
         | Monitoring(beacon, user) => <MonitorScreen beacon user />
-        | WarningUser(beacon, user, neighbor, pathogen) => <WarnScreen beacon user neighbor pathogen />
       }}
     </>
   }

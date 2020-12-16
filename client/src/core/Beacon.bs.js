@@ -10,9 +10,14 @@ function fromString(prim) {
   return JSON.parse(prim);
 }
 
+function toCitizenId(beacon) {
+  return String(beacon.minor);
+}
+
 export {
   toString ,
   fromString ,
+  toCitizenId ,
   
 }
 /* No side effect */

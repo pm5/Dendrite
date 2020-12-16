@@ -1,4 +1,3 @@
-open Belt
 open ReactNative
 
 @react.component
@@ -7,25 +6,23 @@ let make = (~beacon) => {
 
   React.useEffect0(() => {
     open Async
-    let id = beacon.Beacon.minor->Int.toString
+    let id = beacon->Beacon.toCitizenId
     Db.citizen(id)
-      ->then_(data => {
-        let user = data.data.citizen
-        Storage.saveUser(user)->then_(() => user->async)
+      ->then_(user => {
+        Storage.saveUser(user)
+          ->then_(() => user->async)
       })
       ->then_(user => {
         setAppState(StateProvider.take(StateProvider.SaveUser(user)))->async
       })
-      ->catch(err => {
-        Js.log(err)->async
-      })
+      ->catch(err => Js.log(err)->async)
       ->ignore
     None
   })
 
   <>
     <View>
-      <Text>{("Loading user data from beacon " ++ beacon.Beacon.minor->Int.toString)->React.string}</Text>
+      <Text>{("Loading user data from beacon " ++ beacon->Beacon.toCitizenId)->React.string}</Text>
     </View>
   </>
 }

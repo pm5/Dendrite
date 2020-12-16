@@ -13,10 +13,12 @@ function dangeredBy(user, neighbors) {
                           }));
             })), [], Belt_Array.concat);
   return Belt_Array.reduce(Belt_Array.map(neighbors, (function (param) {
-                    return Belt_Array.map(Belt_Array.keep(param.citizen.infections, (function (inf) {
-                                      return !Belt_Array.some(immunes, (function (immune) {
-                                                    return immune === inf.pathogen.name;
-                                                  }));
+                    return Belt_Array.map(Belt_Array.keep(Belt_Array.keep(param.citizen.infections, (function (inf) {
+                                          return !Belt_Array.some(immunes, (function (immune) {
+                                                        return immune === inf.pathogen.name;
+                                                      }));
+                                        })), (function (inf) {
+                                      return param.distanceInMeters < inf.pathogen.spreadDistanceInMeters;
                                     })), (function (inf) {
                                   return [
                                           param,
