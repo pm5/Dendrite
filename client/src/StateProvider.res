@@ -20,7 +20,7 @@ type action =
 
 let stateContext = React.createContext((Start, (_: t => t) => ()))
 
-/// XXX
+/// XXX include doesn't work?
 let makeProps = (~value, ~children, ()) => {
   "value": value,
   "children": children,
