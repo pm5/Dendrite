@@ -45,12 +45,6 @@ type Citizen {
   immunities: [Immunity!]!
 }
 
-input Neighbor {
-  citizen: ID!
-  distanceInMeters: Float!
-  measuredAt: DateTime!
-}
-
 type Query {
   allCitizens: [Citizen!]!
   citizen(id: ID!): Citizen
@@ -59,6 +53,12 @@ type Query {
   allAntibodies: [Antibody!]!
 }
 
+input Neighbor {
+  citizen: ID!
+  distanceInMeters: Float!
+  measuredAt: DateTime!
+}
+
 type Mutation {
-  reportNeighbors(citizen: ID!, neighbors: [Neighbor!]!): [Citizen!]!
+  reportDanger(citizen: ID!, neighbor: Neighbor!, pathogen: ID!): Citizen!
 }
