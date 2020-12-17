@@ -18,12 +18,29 @@ let make = (~beacon as _, ~user) => {
     <View>
       <Text>{"Monitor"->React.string}</Text>
       <Text>{(neighbors->Option.map(neighbors => neighbors->Array.length->Int.toString ++ " neighbors"))->Option.getWithDefault("No results yet")->React.string}</Text>
-      <Text>{
+      {
         switch danger {
-          | Some(neighbor, pathogen) => neighbor.citizen.id ++ " within " ++ neighbor.distanceInMeters->Float.toString ++ " meter(s) is dangerous because of " ++ pathogen.name
-          | None => "No danger"
-        }->React.string
-      }</Text>
+          | Some(neighbor, pathogen) => {
+            Js.log(neighbor.citizen.photo[0])
+            <View>
+              <Text>{(neighbor.citizen.id ++ " within " ++ neighbor.distanceInMeters->Float.toString ++ " meter(s) is dangerous because of " ++ pathogen.name)->React.string}</Text>
+              {neighbor.citizen.photo->Array.get(0)->Option.map(photo =>
+                <Image
+                  source={Image.Source.fromUriSource(Image.uriSource(
+                          ~uri=photo.Photo.thumbnail.url,
+                          ()))}
+                  style={Style.style(
+                    ~width=photo.thumbnail.width->Int.toFloat->Style.dp,
+                    ~height=photo.thumbnail.height->Int.toFloat->Style.dp,
+                    ())}
+                  resizeMode=#contain
+                  />)->Option.getWithDefault(React.null)}
+              <Text>{"yo"->React.string}</Text>
+            </View>
+          }
+          | None => <Text>{"No danger"->React.string}</Text>
+        }
+      }
       <Button
         onPress={_ => reset(setAppState)}
         title="Reset"

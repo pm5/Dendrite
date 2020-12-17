@@ -21,6 +21,7 @@ let one = id => {
         infections { pathogen { name, spreadDistanceInMeters }, infectedAt }
         vaccinations { vaccine { name }, adminedAt }
         immunities { antibody { name, bindsTo { name, spreadDistanceInMeters } } expiresAt }
+        photo { id, url, size, thumbnail { url, width, height } }
       }
     }
     `
@@ -44,6 +45,7 @@ let all = () => {
         infections { pathogen { name, spreadDistanceInMeters }, infectedAt }
         vaccinations { vaccine { name }, adminedAt }
         immunities { antibody { name, bindsTo { name, spreadDistanceInMeters } } expiresAt }
+        photo { id, url, size, thumbnail { url, width, height } }
       }
     }
   `
