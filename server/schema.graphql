@@ -37,12 +37,26 @@ type Immunity {
   expiresAt: DateTime!
 }
 
+type Thumbnail {
+  url: String!
+  width: Int!
+  height: Int!
+}
+
+type Photo {
+  id: ID!
+  url: String!
+  size: Int!
+  thumbnail: Thumbnail!
+}
+
 type Citizen {
   id: ID!
   name: String!
   infections: [Infection!]!
   vaccinations: [Vaccination!]!
   immunities: [Immunity!]!
+  photo: [Photo!]!
 }
 
 type Query {

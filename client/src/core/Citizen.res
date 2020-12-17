@@ -6,6 +6,7 @@ type t = {
   infections: array<Infection.t>,
   vaccinations: array<Vaccination.t>,
   immunities: array<Immunity.t>,
+  photo: array<Photo.t>,
 }
 
 type query = {

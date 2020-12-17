@@ -94,6 +94,25 @@ function antibodies(param) {
               }), param);
 }
 
+function thumbnail(json) {
+  return {
+          url: Json_decode.field("url", Json_decode.string, json),
+          width: Json_decode.field("width", Json_decode.$$int, json),
+          height: Json_decode.field("height", Json_decode.$$int, json)
+        };
+}
+
+function photo(json) {
+  return {
+          id: Json_decode.field("id", Json_decode.string, json),
+          url: Json_decode.field("url", Json_decode.string, json),
+          size: Json_decode.field("size", Json_decode.$$int, json),
+          thumbnail: Json_decode.field("thumbnails", (function (param) {
+                  return Json_decode.field("large", thumbnail, param);
+                }), json)
+        };
+}
+
 function citizen(param) {
   return Json_decode.field("fields", (function (json) {
                 return {
@@ -114,6 +133,11 @@ function citizen(param) {
                         immunities: Json_decode.withDefault([], (function (param) {
                                 return Json_decode.field("immunities", (function (param) {
                                               return Json_decode.array(Json_decode.string, param);
+                                            }), param);
+                              }), json),
+                        photo: Json_decode.withDefault([], (function (param) {
+                                return Json_decode.field("photo", (function (param) {
+                                              return Json_decode.array(photo, param);
                                             }), param);
                               }), json)
                       };
@@ -166,6 +190,8 @@ var Decode = {
   vaccines: vaccines,
   antibody: antibody,
   antibodies: antibodies,
+  thumbnail: thumbnail,
+  photo: photo,
   citizen: citizen,
   citizens: citizens,
   infection: infection,

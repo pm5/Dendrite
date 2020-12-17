@@ -14,6 +14,10 @@ var Vaccination = {};
 
 var Immunity = {};
 
+var Thumbtail = {};
+
+var Photo = {};
+
 var Citizen = {};
 
 var ProximityObservation = {};
@@ -26,6 +30,8 @@ exports.Vaccine = Vaccine;
 exports.Infection = Infection;
 exports.Vaccination = Vaccination;
 exports.Immunity = Immunity;
+exports.Thumbtail = Thumbtail;
+exports.Photo = Photo;
 exports.Citizen = Citizen;
 exports.ProximityObservation = ProximityObservation;
 exports.Resolvers = Resolvers;

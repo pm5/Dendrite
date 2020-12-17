@@ -54,6 +54,24 @@ module Immunity = {
   }
 }
 
+module Thumbtail = {
+  type t = {
+    url: string
+    width: int
+    height: int
+  }
+}
+
+module Photo = {
+  type id = string
+  type t = {
+    id: id
+    url: string
+    size: int
+    thumbnail: Thumbtail.t
+  }
+}
+
 module Citizen = {
   type id = string
   type t = {
@@ -62,6 +80,7 @@ module Citizen = {
     infections: array<Infection.id>
     vaccinations: array<Vaccination.id>
     immunities: array<Immunity.id>
+    photo: array<Photo.t>
   }
 }
 

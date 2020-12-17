@@ -56,12 +56,26 @@ module Decode = {
 
   let antibodies = field("records", array(antibody))
 
+  let thumbnail = json => {
+    GraphQL.Thumbtail.url:  json |> field("url", string),
+    width:                  json |> field("width", int),
+    height:                 json |> field("height", int),
+  }
+
+  let photo = json => {
+    GraphQL.Photo.id:   json |> field("id", string),
+    url:                json |> field("url", string),
+    size:               json |> field("size", int),
+    thumbnail:          json |> field("thumbnails", field("large", thumbnail)),
+  }
+
   let citizen = field("fields", json => {
     GraphQL.Citizen.id: json |> field("id", string),
     name:               json |> withDefault("", field("name", string)),
     infections:         json |> withDefault([], field("infections", array(string))),
     vaccinations:       json |> withDefault([], field("vaccinations", array(string))),
     immunities:         json |> withDefault([], field("immunities", array(string))),
+    photo:              json |> withDefault([], field("photo", array(photo))),
   })
 
   let citizens = field("records", array(citizen))
