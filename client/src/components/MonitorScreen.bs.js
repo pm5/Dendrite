@@ -7,6 +7,7 @@ import * as Monitor from "../Monitor.bs.js";
 import * as $$Storage from "../Storage.bs.js";
 import * as Belt_Array from "bs-platform/lib/es6/belt_Array.js";
 import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
+import * as ScreenStyle from "../styles/ScreenStyle.bs.js";
 import * as ReactNative from "react-native";
 import * as StateProvider from "../StateProvider.bs.js";
 
@@ -21,59 +22,60 @@ function reset(setAppState) {
   
 }
 
+function MonitorScreen$WarnScreen(Props) {
+  var neighbor = Props.neighbor;
+  return React.createElement(ReactNative.View, {
+              style: ScreenStyle.styles.background,
+              children: Belt_Option.getWithDefault(Belt_Option.map(Belt_Array.get(neighbor.citizen.photo, 0), (function (photo) {
+                          return React.createElement(ReactNative.Image, {
+                                      resizeMode: "cover",
+                                      source: {
+                                        uri: photo.thumbnail.url
+                                      },
+                                      style: {
+                                        height: photo.thumbnail.height,
+                                        width: photo.thumbnail.width
+                                      }
+                                    });
+                        })), null)
+            });
+}
+
+var WarnScreen = {
+  make: MonitorScreen$WarnScreen
+};
+
 function MonitorScreen(Props) {
   var user = Props.user;
   var match = StateProvider.useContext(undefined);
   var setAppState = match[1];
   var match$1 = Monitor.useMonitor(user);
   var danger = match$1[1];
-  var tmp;
-  if (danger !== undefined) {
-    var neighbor = danger[0];
-    console.log(Belt_Array.get(neighbor.citizen.photo, 0));
-    tmp = React.createElement(ReactNative.View, {
-          children: null
-        }, React.createElement(ReactNative.Text, {
-              children: neighbor.citizen.id + " within " + String(neighbor.distanceInMeters) + " meter(s) is dangerous because of " + danger[1].name
-            }), Belt_Option.getWithDefault(Belt_Option.map(Belt_Array.get(neighbor.citizen.photo, 0), (function (photo) {
-                    return React.createElement(ReactNative.Image, {
-                                resizeMode: "contain",
-                                source: {
-                                  uri: photo.thumbnail.url
-                                },
-                                style: {
-                                  height: photo.thumbnail.height,
-                                  width: photo.thumbnail.width
-                                }
-                              });
-                  })), null), React.createElement(ReactNative.Text, {
-              children: "yo"
-            }));
-  } else {
-    tmp = React.createElement(ReactNative.Text, {
-          children: "No danger"
-        });
-  }
-  return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
-                  children: null
-                }, React.createElement(ReactNative.Text, {
-                      children: "Monitor"
-                    }), React.createElement(ReactNative.Text, {
-                      children: Belt_Option.getWithDefault(Belt_Option.map(match$1[0], (function (neighbors) {
-                                  return String(neighbors.length) + " neighbors";
-                                })), "No results yet")
-                    }), tmp, React.createElement(ReactNative.Button, {
-                      onPress: (function (param) {
-                          return reset(setAppState);
-                        }),
-                      title: "Reset"
-                    })));
+  return React.createElement(React.Fragment, undefined, danger !== undefined ? React.createElement(MonitorScreen$WarnScreen, {
+                    neighbor: danger[0],
+                    pathogen: danger[1]
+                  }) : React.createElement(ReactNative.View, {
+                    style: ScreenStyle.styles.background,
+                    children: null
+                  }, React.createElement(ReactNative.Text, {
+                        children: Belt_Option.getWithDefault(Belt_Option.map(match$1[0], (function (neighbors) {
+                                    return String(neighbors.length) + " neighbors";
+                                  })), "No results yet")
+                      }), React.createElement(ReactNative.Text, {
+                        children: "No danger"
+                      }), React.createElement(ReactNative.Button, {
+                        onPress: (function (param) {
+                            return reset(setAppState);
+                          }),
+                        title: "Reset"
+                      })));
 }
 
 var make = MonitorScreen;
 
 export {
   reset ,
+  WarnScreen ,
   make ,
   
 }
