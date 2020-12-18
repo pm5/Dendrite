@@ -33,6 +33,7 @@ let reset = (setAppState) => {
 module WarnScreen = {
   @react.component
   let make = (~neighbor: Neighbor.t, ~pathogen: Pathogen.t) => {
+    Vibration.vibrateWithDuration(100, ())
     <View>
       <Text style={styles["warning"]}>{"Warning"->React.string}</Text>
       <Text style={styles["danger"]}>{(pathogen.name ++ ": within " ++ ((neighbor.distanceInMeters *. 10.)->Float.toInt->Int.toFloat /. 10.)->Float.toString ++ " meter(s)")->React.string}

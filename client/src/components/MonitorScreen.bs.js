@@ -45,6 +45,7 @@ function reset(setAppState) {
 function MonitorScreen$WarnScreen(Props) {
   var neighbor = Props.neighbor;
   var pathogen = Props.pathogen;
+  ReactNative.Vibration.vibrate(100, undefined);
   return React.createElement(ReactNative.View, {
               children: null
             }, React.createElement(ReactNative.Text, {
