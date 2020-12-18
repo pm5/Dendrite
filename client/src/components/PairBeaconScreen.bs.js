@@ -111,7 +111,9 @@ function PairBeaconScreen(Props) {
                                     })), "")
                         }), React.createElement(ReactNative.View, {
                           style: {
-                            flexDirection: "row"
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            paddingTop: 13
                           },
                           children: null
                         }, React.createElement(ReactNative.Button, {

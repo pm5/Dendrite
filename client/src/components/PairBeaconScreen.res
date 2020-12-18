@@ -63,7 +63,7 @@ let make = () => {
         | StateProvider.ScanningBeacon when selected->Option.isSome => {
           <View style={styles["column"]}>
             <Text style={ScreenStyle.styles["text"]}>{("Pair with " ++ selected->Option.map(beacon => beacon.minor->Int.toString)->Option.getWithDefault(""))->React.string}</Text>
-            <View style={Style.style(~flexDirection=#row, ())}>
+            <View style={Style.style(~flexDirection=#row, ~justifyContent=#spaceBetween, ~paddingTop=13.->Style.dp, ())}>
               <Button title="Yes" onPress={_ => selected->Option.map(saveBeacon) |> ignore} />
               <Button title="No" onPress={_ => setSelected(_ => None)} />
             </View>
