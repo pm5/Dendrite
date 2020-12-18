@@ -10,7 +10,8 @@ var styles = ReactNative.StyleSheet.create({
         justifyContent: "center"
       },
       text: {
-        color: "#ffffff"
+        color: "#ffffff",
+        fontSize: 18
       }
     });
 

@@ -7,6 +7,10 @@ let styles = StyleSheet.create({
     ~flexDirection=#row,
     ~padding=8.->dp,
     ()),
+  "column": style(
+    ~flexDirection=#column,
+    ~padding=8.->dp,
+    ()),
   "beacon": textStyle(
     ~flex=5.,
     ()),
@@ -49,26 +53,29 @@ let make = () => {
     <Logo />
     {
       switch appState {
+        | StateProvider.ScanningBeacon when selected->Option.isNone => {
+          <FlatList
+            data=beacons
+            renderItem={({item, _}) => <BeaconRow beacon={item} onSelect={_ => setSelected(_ => Some(item))} />}
+            keyExtractor={(beacon, _) => beacon.minor->Int.toString}
+            />
+        }
         | StateProvider.ScanningBeacon when selected->Option.isSome => {
-          <View>
-            <Text>{("Going to pair with " ++ selected->Option.map(beacon => beacon.minor->Int.toString)->Option.getWithDefault(""))->React.string}</Text>
-            <Button title="Yes" onPress={_ => selected->Option.map(saveBeacon) |> ignore} />
-            <Button title="No" onPress={_ => setSelected(_ => None)} />
+          <View style={styles["column"]}>
+            <Text style={ScreenStyle.styles["text"]}>{("Pair with " ++ selected->Option.map(beacon => beacon.minor->Int.toString)->Option.getWithDefault(""))->React.string}</Text>
+            <View style={Style.style(~flexDirection=#row, ())}>
+              <Button title="Yes" onPress={_ => selected->Option.map(saveBeacon) |> ignore} />
+              <Button title="No" onPress={_ => setSelected(_ => None)} />
+            </View>
           </View>
         }
-        | StateProvider.BeaconSaved(beacon) => {
+        | StateProvider.BeaconSaved(_beacon) => {
           <View>
-            <Text>{("Paired with " ++ beacon.minor->Int.toString)->React.string}</Text>
             <Button title="Proceed" onPress={_ => confirmSaved()} />
           </View>
         }
         | _ => React.null
       }
     }
-    <FlatList
-      data=beacons
-      renderItem={({item, _}) => <BeaconRow beacon={item} onSelect={_ => setSelected(_ => Some(item))} />}
-      keyExtractor={(beacon, _) => beacon.minor->Int.toString}
-      />
   </View>
 }

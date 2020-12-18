@@ -10,6 +10,7 @@ let styles = StyleSheet.create({
     ()),
   "text": textStyle(
     ~color="#ffffff",
+    ~fontSize=18.,
     ()
     ),
 })
