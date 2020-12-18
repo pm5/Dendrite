@@ -1,4 +1,5 @@
 type t =
+  | NeedPermission
   | Start
   | BeaconPaired(Beacon.t)
   | UserLoaded(Beacon.t, Citizen.t)

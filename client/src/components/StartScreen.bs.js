@@ -14,7 +14,7 @@ function StartScreen(Props) {
             }, React.createElement(Logo.make, {}), React.createElement(ReactNative.Button, {
                   onPress: (function (param) {
                       return Curry._1(setAppState, (function (param) {
-                                    return /* ScanningBeacon */1;
+                                    return /* ScanningBeacon */2;
                                   }));
                     }),
                   title: "Start"

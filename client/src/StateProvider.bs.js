@@ -4,7 +4,7 @@ import * as React from "react";
 import * as Pervasives from "bs-platform/lib/es6/pervasives.js";
 
 var stateContext = React.createContext([
-      /* Start */0,
+      /* Start */1,
       (function (param) {
           
         })
@@ -26,7 +26,7 @@ function useContext(param) {
 function take(action, currentState) {
   if (typeof action !== "number") {
     if (action.TAG === /* SaveBeacon */0) {
-      if (typeof currentState === "number" && currentState !== 0) {
+      if (typeof currentState === "number" && currentState >= 2) {
         return {
                 TAG: /* BeaconSaved */2,
                 _0: action._0
@@ -46,8 +46,8 @@ function take(action, currentState) {
   }
   switch (action) {
     case /* PairBeacon */0 :
-        if (typeof currentState === "number" && currentState === 0) {
-          return /* ScanningBeacon */1;
+        if (typeof currentState === "number" && currentState === 1) {
+          return /* ScanningBeacon */2;
         } else {
           return Pervasives.failwith("Invalid action at current state");
         }

@@ -4,6 +4,7 @@ import * as Async from "./Async.bs.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
 import * as $$Storage from "./Storage.bs.js";
+import * as Caml_obj from "bs-platform/lib/es6/caml_obj.js";
 import * as ScreenStyle from "./styles/ScreenStyle.bs.js";
 import * as StartScreen from "./components/StartScreen.bs.js";
 import * as ReactNative from "react-native";
@@ -11,28 +12,33 @@ import * as MonitorScreen from "./components/MonitorScreen.bs.js";
 import * as StateProvider from "./StateProvider.bs.js";
 import * as LoadUserScreen from "./components/LoadUserScreen.bs.js";
 import * as PairBeaconScreen from "./components/PairBeaconScreen.bs.js";
+import * as NeedPermissionScreen from "./components/NeedPermissionScreen.bs.js";
 
 function App$AppScreen(Props) {
   var match = React.useContext(StateProvider.stateContext);
   var state = match[0];
   if (typeof state === "number") {
-    if (state === /* Start */0) {
-      return React.createElement(StartScreen.make, {});
-    } else {
-      return React.createElement(PairBeaconScreen.make, {});
+    switch (state) {
+      case /* NeedPermission */0 :
+          return React.createElement(NeedPermissionScreen.make, {});
+      case /* Start */1 :
+          return React.createElement(StartScreen.make, {});
+      default:
+        return React.createElement(PairBeaconScreen.make, {});
     }
-  }
-  switch (state.TAG | 0) {
-    case /* UserLoaded */1 :
-    case /* LoadingUser */3 :
-        break;
-    case /* Monitoring */4 :
-        return React.createElement(MonitorScreen.make, {
-                    beacon: state._0,
-                    user: state._1
-                  });
-    default:
-      return React.createElement(PairBeaconScreen.make, {});
+  } else {
+    switch (state.TAG | 0) {
+      case /* UserLoaded */1 :
+      case /* LoadingUser */3 :
+          break;
+      case /* Monitoring */4 :
+          return React.createElement(MonitorScreen.make, {
+                      beacon: state._0,
+                      user: state._1
+                    });
+      default:
+        return React.createElement(PairBeaconScreen.make, {});
+    }
   }
   return React.createElement(LoadUserScreen.make, {
               beacon: state._0
@@ -57,10 +63,32 @@ var Root = {
 
 function App$app(Props) {
   var match = React.useState(function () {
-        return /* Start */0;
+        return /* Start */1;
       });
   var setAppState = match[1];
   var appState = match[0];
+  React.useEffect((function () {
+          var acquirePermission = function (perm) {
+            return Async.then_(ReactNative.PermissionsAndroid.check(perm), (function (permitted) {
+                          if (permitted) {
+                            return Async.async(permitted);
+                          } else {
+                            return Async.then_(ReactNative.PermissionsAndroid.request(perm), (function (result) {
+                                          return Async.async(Caml_obj.caml_equal(result, ReactNative.PermissionsAndroid.RESULTS.GRANTED));
+                                        }));
+                          }
+                        }));
+          };
+          Async.then_(acquirePermission(ReactNative.PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION), (function (gotit) {
+                  if (!gotit) {
+                    Curry._1(setAppState, (function (param) {
+                            return /* NeedPermission */0;
+                          }));
+                  }
+                  return Async.async(undefined);
+                }));
+          
+        }), [appState]);
   React.useEffect((function () {
           if (typeof appState !== "number") {
             switch (appState.TAG | 0) {
@@ -97,7 +125,7 @@ function App$app(Props) {
                                                               };
                                                       }))
                                             ) : Curry._1(setAppState, (function (param) {
-                                                    return /* Start */0;
+                                                    return /* Start */1;
                                                   })));
                               }));
                 }));

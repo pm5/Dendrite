@@ -7,6 +7,7 @@ module AppScreen = {
 
     {switch state {
       | Start => <StartScreen />
+      | NeedPermission => <NeedPermissionScreen />
       | ScanningBeacon | BeaconSaved(_) | BeaconPaired(_) => <PairBeaconScreen />
       | LoadingUser(beacon) | UserLoaded(beacon, _) => <LoadUserScreen beacon />
       | Monitoring(beacon, user) => <MonitorScreen beacon user />
@@ -22,6 +23,42 @@ module Root = {
 @react.component
 let app = () => {
   let (appState, setAppState) = React.useState(() => StateProvider.Start)
+
+  React.useEffect1(() => {
+    open Async
+    open PermissionsAndroid
+    let acquirePermission = perm => {
+      check(perm)
+        ->then_(permitted => {
+          if permitted {
+            permitted->async
+          } else {
+            request(perm)
+              ->then_(result => {
+                // XXX Result.granted gets syntax error in switch
+                (result == Result.granted)->async
+              })
+          }
+        })
+    }
+
+    acquirePermission(Permission.accessCoarseLocation)
+      //->then_(gotit => {
+      //  if gotit {
+      //    acquirePermission(Permission.accessFineLocation)
+      //  } else {
+      //    gotit->async
+      //  }
+      //})
+      ->then_(gotit => {
+        if !gotit {
+          setAppState(_ => StateProvider.NeedPermission)
+        }
+        ()->async
+      })
+      ->ignore
+    None
+  }, [appState])
 
   React.useEffect1(() => {
     switch appState {

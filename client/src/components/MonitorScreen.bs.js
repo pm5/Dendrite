@@ -44,7 +44,7 @@ function reset(setAppState) {
               return $$Storage.resetUser(undefined);
             })), (function (param) {
           return Async.async(Curry._1(setAppState, (function (param) {
-                            return /* Start */0;
+                            return /* Start */1;
                           })));
         }));
   

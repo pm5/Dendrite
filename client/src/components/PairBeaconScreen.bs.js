@@ -83,7 +83,7 @@ function PairBeaconScreen(Props) {
   var tmp;
   var tmp$1 = match[0];
   tmp = typeof tmp$1 === "number" ? (
-      tmp$1 === /* ScanningBeacon */1 ? (
+      tmp$1 === /* ScanningBeacon */2 ? (
           Belt_Option.isNone(selected) ? React.createElement(ReactNative.FlatList, {
                   data: match$1[0],
                   keyExtractor: (function (beacon, param) {

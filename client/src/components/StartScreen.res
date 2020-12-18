@@ -2,7 +2,7 @@ open ReactNative
 
 @react.component
 let make = () => {
-  let (_, setAppState) = React.useContext(StateProvider.stateContext)
+  let (_appState, setAppState) = React.useContext(StateProvider.stateContext)
 
   <View>
     <Logo />
