@@ -17,7 +17,15 @@ let styles = {
       ~fontSize=18.,
       ~fontWeight=#bold,
       ~textAlign=#center,
-      ~padding=6.->dp,
+      ~paddingTop=6.->dp,
+      ~paddingBottom=0.->dp,
+      ()),
+    "suggest": textStyle(
+      ~color="#fff",
+      ~fontSize=18.,
+      ~fontWeight=#bold,
+      ~textAlign=#center,
+      ~padding=2.->dp,
       ()),
   })
 }
@@ -36,8 +44,8 @@ module WarnScreen = {
     Vibration.vibrateWithDuration(100, ())
     <View>
       <Text style={styles["warning"]}>{"Warning"->React.string}</Text>
-      <Text style={styles["danger"]}>{(pathogen.name ++ ": within " ++ ((neighbor.distanceInMeters *. 10.)->Float.toInt->Int.toFloat /. 10.)->Float.toString ++ " meter(s)")->React.string}
-      </Text>
+      <Text style={styles["danger"]}>{(pathogen.name ++ ": within " ++ ((neighbor.distanceInMeters *. 10.)->Float.toInt->Int.toFloat /. 10.)->Float.toString ++ " meter(s)")->React.string}</Text>
+      <Text style={styles["suggest"]}>{"Suggest keeping distance"->React.string}</Text>
       {neighbor.citizen.photo->Array.get(0)->Option.map(photo =>
         <Image
           source={Image.Source.fromUriSource(Image.uriSource(

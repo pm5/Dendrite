@@ -27,7 +27,15 @@ var styles = ReactNative.StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         textAlign: "center",
-        padding: 6
+        paddingBottom: 0,
+        paddingTop: 6
+      },
+      suggest: {
+        color: "#fff",
+        fontSize: 18,
+        fontWeight: "bold",
+        textAlign: "center",
+        padding: 2
       }
     });
 
@@ -54,6 +62,9 @@ function MonitorScreen$WarnScreen(Props) {
                 }), React.createElement(ReactNative.Text, {
                   style: styles.danger,
                   children: pathogen.name + ": within " + String((neighbor.distanceInMeters * 10 | 0) / 10) + " meter(s)"
+                }), React.createElement(ReactNative.Text, {
+                  style: styles.suggest,
+                  children: "Suggest keeping distance"
                 }), Belt_Option.getWithDefault(Belt_Option.map(Belt_Array.get(neighbor.citizen.photo, 0), (function (photo) {
                         return React.createElement(ReactNative.Image, {
                                     resizeMode: "cover",
