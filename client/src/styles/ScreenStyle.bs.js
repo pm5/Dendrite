@@ -8,6 +8,9 @@ var styles = ReactNative.StyleSheet.create({
         alignItems: "center",
         flex: 1,
         justifyContent: "center"
+      },
+      text: {
+        color: "#ffffff"
       }
     });
 

@@ -8,5 +8,9 @@ let styles = StyleSheet.create({
     ~justifyContent=#center,
     ~alignItems=#center,
     ()),
+  "text": textStyle(
+    ~color="#ffffff",
+    ()
+    ),
 })
 
