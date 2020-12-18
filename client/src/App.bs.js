@@ -4,7 +4,9 @@ import * as Async from "./Async.bs.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
 import * as $$Storage from "./Storage.bs.js";
+import * as ScreenStyle from "./styles/ScreenStyle.bs.js";
 import * as StartScreen from "./components/StartScreen.bs.js";
+import * as ReactNative from "react-native";
 import * as MonitorScreen from "./components/MonitorScreen.bs.js";
 import * as StateProvider from "./StateProvider.bs.js";
 import * as LoadUserScreen from "./components/LoadUserScreen.bs.js";
@@ -13,36 +15,44 @@ import * as PairBeaconScreen from "./components/PairBeaconScreen.bs.js";
 function App$AppScreen(Props) {
   var match = React.useContext(StateProvider.stateContext);
   var state = match[0];
-  var tmp;
-  var exit = 0;
   if (typeof state === "number") {
-    tmp = state === /* Start */0 ? React.createElement(StartScreen.make, {}) : React.createElement(PairBeaconScreen.make, {});
-  } else {
-    switch (state.TAG | 0) {
-      case /* UserLoaded */1 :
-      case /* LoadingUser */3 :
-          exit = 1;
-          break;
-      case /* Monitoring */4 :
-          tmp = React.createElement(MonitorScreen.make, {
-                beacon: state._0,
-                user: state._1
-              });
-          break;
-      default:
-        tmp = React.createElement(PairBeaconScreen.make, {});
+    if (state === /* Start */0) {
+      return React.createElement(StartScreen.make, {});
+    } else {
+      return React.createElement(PairBeaconScreen.make, {});
     }
   }
-  if (exit === 1) {
-    tmp = React.createElement(LoadUserScreen.make, {
-          beacon: state._0
-        });
+  switch (state.TAG | 0) {
+    case /* UserLoaded */1 :
+    case /* LoadingUser */3 :
+        break;
+    case /* Monitoring */4 :
+        return React.createElement(MonitorScreen.make, {
+                    beacon: state._0,
+                    user: state._1
+                  });
+    default:
+      return React.createElement(PairBeaconScreen.make, {});
   }
-  return React.createElement(React.Fragment, undefined, tmp);
+  return React.createElement(LoadUserScreen.make, {
+              beacon: state._0
+            });
 }
 
 var AppScreen = {
   make: App$AppScreen
+};
+
+function App$Root(Props) {
+  var children = Props.children;
+  return React.createElement(ReactNative.View, {
+              style: ScreenStyle.styles.background,
+              children: children
+            });
+}
+
+var Root = {
+  make: App$Root
 };
 
 function App$app(Props) {
@@ -93,16 +103,19 @@ function App$app(Props) {
                 }));
           
         }), []);
-  return React.createElement(React.Fragment, undefined, React.createElement(StateProvider.make, StateProvider.makeProps([
-                      appState,
-                      setAppState
-                    ], React.createElement(App$AppScreen, {}), undefined)));
+  return React.createElement(App$Root, {
+              children: React.createElement(StateProvider.make, StateProvider.makeProps([
+                        appState,
+                        setAppState
+                      ], React.createElement(App$AppScreen, {}), undefined))
+            });
 }
 
 var app = App$app;
 
 export {
   AppScreen ,
+  Root ,
   app ,
   
 }

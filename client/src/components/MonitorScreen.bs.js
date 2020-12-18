@@ -7,7 +7,6 @@ import * as Monitor from "../Monitor.bs.js";
 import * as $$Storage from "../Storage.bs.js";
 import * as Belt_Array from "bs-platform/lib/es6/belt_Array.js";
 import * as Belt_Option from "bs-platform/lib/es6/belt_Option.js";
-import * as ScreenStyle from "../styles/ScreenStyle.bs.js";
 import * as ReactNative from "react-native";
 import * as StateProvider from "../StateProvider.bs.js";
 
@@ -24,21 +23,29 @@ function reset(setAppState) {
 
 function MonitorScreen$WarnScreen(Props) {
   var neighbor = Props.neighbor;
+  var pathogen = Props.pathogen;
   return React.createElement(ReactNative.View, {
-              style: ScreenStyle.styles.background,
-              children: Belt_Option.getWithDefault(Belt_Option.map(Belt_Array.get(neighbor.citizen.photo, 0), (function (photo) {
-                          return React.createElement(ReactNative.Image, {
-                                      resizeMode: "cover",
-                                      source: {
-                                        uri: photo.thumbnail.url
-                                      },
-                                      style: {
-                                        height: photo.thumbnail.height,
-                                        width: photo.thumbnail.width
-                                      }
-                                    });
-                        })), null)
-            });
+              children: null
+            }, Belt_Option.getWithDefault(Belt_Option.map(Belt_Array.get(neighbor.citizen.photo, 0), (function (photo) {
+                        return React.createElement(ReactNative.Image, {
+                                    resizeMode: "cover",
+                                    source: {
+                                      uri: photo.thumbnail.url
+                                    },
+                                    style: {
+                                      height: photo.thumbnail.height,
+                                      width: photo.thumbnail.width
+                                    }
+                                  });
+                      })), null), React.createElement(ReactNative.Text, {
+                  style: {
+                    color: "#ffffff",
+                    backgroundColor: "#ff0000"
+                  },
+                  children: "Warning"
+                }), React.createElement(ReactNative.Text, {
+                  children: neighbor.citizen.id + " within " + String(neighbor.distanceInMeters) + " meter(s) is dangerous because of " + pathogen.name
+                }));
 }
 
 var WarnScreen = {
@@ -55,7 +62,6 @@ function MonitorScreen(Props) {
                     neighbor: danger[0],
                     pathogen: danger[1]
                   }) : React.createElement(ReactNative.View, {
-                    style: ScreenStyle.styles.background,
                     children: null
                   }, React.createElement(ReactNative.Text, {
                         children: Belt_Option.getWithDefault(Belt_Option.map(match$1[0], (function (neighbors) {

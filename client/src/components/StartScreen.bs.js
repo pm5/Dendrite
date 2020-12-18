@@ -8,37 +8,37 @@ import * as StateProvider from "../StateProvider.bs.js";
 function StartScreen(Props) {
   var match = React.useContext(StateProvider.stateContext);
   var setAppState = match[1];
-  return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
-                  children: null
-                }, React.createElement(ReactNative.Text, {
-                      children: "Start Screen"
-                    }), React.createElement(ReactNative.Button, {
-                      onPress: (function (param) {
-                          return Curry._1(setAppState, (function (param) {
-                                        return /* ScanningBeacon */1;
-                                      }));
-                        }),
-                      title: "No beacon paired"
-                    }), React.createElement(ReactNative.Button, {
-                      onPress: (function (param) {
-                          return Curry._1(setAppState, (function (param) {
-                                        return StateProvider.take(/* LoadUser */2, param);
-                                      }));
-                        }),
-                      title: "No user"
-                    }), React.createElement(ReactNative.Button, {
-                      onPress: (function (param) {
-                          return Curry._1(setAppState, (function (param) {
-                                        return StateProvider.take(/* StartMonitor */3, param);
-                                      }));
-                        }),
-                      title: "All good to go"
-                    }), React.createElement(ReactNative.Button, {
-                      onPress: (function (param) {
-                          
-                        }),
-                      title: "Clear beacon data"
-                    })));
+  return React.createElement(ReactNative.View, {
+              children: null
+            }, React.createElement(ReactNative.Text, {
+                  children: "Start Screen"
+                }), React.createElement(ReactNative.Button, {
+                  onPress: (function (param) {
+                      return Curry._1(setAppState, (function (param) {
+                                    return /* ScanningBeacon */1;
+                                  }));
+                    }),
+                  title: "No beacon paired"
+                }), React.createElement(ReactNative.Button, {
+                  onPress: (function (param) {
+                      return Curry._1(setAppState, (function (param) {
+                                    return StateProvider.take(/* LoadUser */2, param);
+                                  }));
+                    }),
+                  title: "No user"
+                }), React.createElement(ReactNative.Button, {
+                  onPress: (function (param) {
+                      return Curry._1(setAppState, (function (param) {
+                                    return StateProvider.take(/* StartMonitor */3, param);
+                                  }));
+                    }),
+                  title: "All good to go"
+                }), React.createElement(ReactNative.Button, {
+                  onPress: (function (param) {
+                      
+                    }),
+                  title: "Clear beacon data"
+                }));
 }
 
 var make = StartScreen;

@@ -4,7 +4,10 @@ import * as ReactNative from "react-native";
 
 var styles = ReactNative.StyleSheet.create({
       background: {
-        backgroundColor: "#000000"
+        backgroundColor: "#000000",
+        alignItems: "center",
+        flex: 1,
+        justifyContent: "center"
       }
     });
 

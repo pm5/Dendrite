@@ -8,25 +8,23 @@ let make = () => {
     ()
   }
 
-  <>
-    <View>
-      <Text>{"Start Screen"->React.string}</Text>
-      <Button
-        onPress={_ => setAppState(_ => StateProvider.ScanningBeacon)}
-        title="No beacon paired"
-        />
-      <Button
-        onPress={_ => setAppState(StateProvider.take(StateProvider.LoadUser))}
-        title="No user"
-        />
-      <Button
-        onPress={_ => setAppState(StateProvider.take(StateProvider.StartMonitor))}
-        title="All good to go"
-        />
-      <Button
-        onPress={_ => clearBeacon()}
-        title="Clear beacon data"
-        />
-    </View>
-  </>
+  <View>
+    <Text>{"Start Screen"->React.string}</Text>
+    <Button
+      onPress={_ => setAppState(_ => StateProvider.ScanningBeacon)}
+      title="No beacon paired"
+      />
+    <Button
+      onPress={_ => setAppState(StateProvider.take(StateProvider.LoadUser))}
+      title="No user"
+      />
+    <Button
+      onPress={_ => setAppState(StateProvider.take(StateProvider.StartMonitor))}
+      title="All good to go"
+      />
+    <Button
+      onPress={_ => clearBeacon()}
+      title="Clear beacon data"
+      />
+  </View>
 }

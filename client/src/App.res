@@ -1,16 +1,22 @@
+open ReactNative
+
 module AppScreen = {
   @react.component
   let make = () => {
     let (state, _setState) = React.useContext(StateProvider.stateContext)
-    <>
-      {switch state {
-        | Start => <StartScreen />
-        | ScanningBeacon | BeaconSaved(_) | BeaconPaired(_) => <PairBeaconScreen />
-        | LoadingUser(beacon) | UserLoaded(beacon, _) => <LoadUserScreen beacon />
-        | Monitoring(beacon, user) => <MonitorScreen beacon user />
-      }}
-    </>
+
+    {switch state {
+      | Start => <StartScreen />
+      | ScanningBeacon | BeaconSaved(_) | BeaconPaired(_) => <PairBeaconScreen />
+      | LoadingUser(beacon) | UserLoaded(beacon, _) => <LoadUserScreen beacon />
+      | Monitoring(beacon, user) => <MonitorScreen beacon user />
+    }}
   }
+}
+
+module Root = {
+  @react.component
+  let make = (~children) => <View style={ScreenStyle.styles["background"]}>{children}</View>
 }
 
 @react.component
@@ -40,9 +46,9 @@ let app = () => {
     None
   })
 
-  <>
+  <Root>
     <StateProvider value=(appState, setAppState)>
       <AppScreen />
     </StateProvider>
-  </>
+  </Root>
 }

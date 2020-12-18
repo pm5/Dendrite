@@ -12,7 +12,7 @@ let reset = (setAppState) => {
 module WarnScreen = {
   @react.component
   let make = (~neighbor: Neighbor.t, ~pathogen: Pathogen.t) => {
-    <View style={ScreenStyle.styles["background"]}>
+    <View>
       {neighbor.citizen.photo->Array.get(0)->Option.map(photo =>
         <Image
           source={Image.Source.fromUriSource(Image.uriSource(
@@ -24,7 +24,12 @@ module WarnScreen = {
             ())}
           resizeMode=#cover
           />)->Option.getWithDefault(React.null)}
-      /*<Text>{(neighbor.citizen.id ++ " within " ++ neighbor.distanceInMeters->Float.toString ++ " meter(s) is dangerous because of " ++ pathogen.name)->React.string}</Text>*/
+      <Text style={Style.style(
+        ~backgroundColor="#ff0000",
+        ~color="#ffffff",
+        ()
+        )}>{"Warning"->React.string}</Text>
+      <Text>{(neighbor.citizen.id ++ " within " ++ neighbor.distanceInMeters->Float.toString ++ " meter(s) is dangerous because of " ++ pathogen.name)->React.string}</Text>
     </View>
   }
 }
@@ -38,7 +43,7 @@ let make = (~beacon as _, ~user) => {
     {
       switch danger {
         | Some(neighbor, pathogen) => <WarnScreen neighbor pathogen />
-        | None => <View style={ScreenStyle.styles["background"]}>
+        | None => <View>
           <Text>{(neighbors->Option.map(neighbors => neighbors->Array.length->Int.toString ++ " neighbors"))->Option.getWithDefault("No results yet")->React.string}</Text>
           <Text>{"No danger"->React.string}</Text>
           <Button
