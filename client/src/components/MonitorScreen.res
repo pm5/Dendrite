@@ -27,6 +27,9 @@ let styles = {
       ~textAlign=#center,
       ~padding=2.->dp,
       ()),
+    "statusList": viewStyle(
+      ~height=150.->dp,
+      ()),
   })
 }
 
@@ -36,6 +39,32 @@ let reset = (setAppState) => {
     ->then_(() => Storage.resetUser())
     ->then_(() => setAppState(_ => StateProvider.Start)->async)
     ->ignore
+}
+
+module ImmunityRow = {
+  @react.component
+  let make = (~immunity: Immunity.t) =>
+    <View style={Style.style(~flexDirection=#row, ())}>
+      <Text style={ScreenStyle.styles["text"]}>
+        {(immunity.antibody.name ++ "... ")->React.string}
+      </Text>
+      <Text style={Style.array([ScreenStyle.styles["text"], Style.style(~color="#0f0", ())])}>
+        {"IMMUNE"->React.string}
+      </Text>
+    </View>
+}
+
+module InfectionRow = {
+  @react.component
+  let make = (~infection: Infection.t) =>
+    <View style={Style.style(~flexDirection=#row, ())}>
+      <Text style={ScreenStyle.styles["text"]}>
+        {(infection.pathogen.name ++ "... ")->React.string}
+      </Text>
+      <Text style={Style.array([ScreenStyle.styles["text"], Style.style(~color="#0f0", ())])}>
+        {"INFECTED!"->React.string}
+      </Text>
+    </View>
 }
 
 module WarnScreen = {
@@ -62,8 +91,8 @@ module WarnScreen = {
 }
 
 @react.component
-let make = (~beacon as _, ~user) => {
-  let (_, _setAppState) = StateProvider.useContext()
+let make = (~beacon, ~user) => {
+  let (_, setAppState) = StateProvider.useContext()
   let (_neighbors, danger, _setDanger) = Monitor.useMonitor(user)
 
   let (count, setCount) = React.useState(() => 1)
@@ -71,6 +100,24 @@ let make = (~beacon as _, ~user) => {
     let task = Js.Global.setInterval(() => {
       setCount(c => c > 20 ? 1 : c + 1)
     }, 1200)
+    Some(() => Js.Global.clearInterval(task))
+  })
+
+  React.useEffect0(() => {
+    open Async
+    let task = Js.Global.setInterval(() => {
+      let id = beacon->Beacon.toCitizenId
+      Db.citizen(id)
+        ->then_(user => {
+          Storage.saveUser(user)
+            ->then_(() => user->async)
+        })
+        ->then_(user => {
+          setAppState(StateProvider.take(StateProvider.SaveUser(user)))->async
+        })
+        ->catch(err => Js.log(err)->async)
+        ->ignore
+    }, 60000)
     Some(() => Js.Global.clearInterval(task))
   })
 
@@ -83,6 +130,20 @@ let make = (~beacon as _, ~user) => {
           <View>
             <Logo />
             <Text style={array([ScreenStyle.styles["text"], style(~padding=8.->dp, ())])}>{("Monitoring" ++ (Array.make(count, ".")->Js.String.concatMany("")))->React.string}</Text>
+            <View style={styles["statusList"]}>
+              <ScrollView>
+              {
+                user.immunities
+                  ->Array.mapWithIndex((index, immunity) => <ImmunityRow immunity key={index->Int.toString} />)
+                  ->React.array
+              }
+              {
+                user.infections
+                  ->Array.mapWithIndex((index, infection) => <InfectionRow infection key={index->Int.toString} />)
+                  ->React.array
+              }
+              </ScrollView>
+            </View>
           </View>
         }
       }
