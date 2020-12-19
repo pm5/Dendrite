@@ -39,5 +39,6 @@ let take = (action, currentState) =>
     | (SaveUser(user), LoadingUser(beacon)) => UserLoaded(beacon, user)
     | (StartMonitor, UserLoaded(beacon, user)) => Monitoring(beacon, user)
     | (StartMonitor, Monitoring(beacon, user)) => Monitoring(beacon, user)
-    | _ => failwith("Invalid action at current state")
+    | (LoadUser, Monitoring(beacon, _user)) => LoadingUser(beacon)
+    | _ => Start
   }

@@ -61,7 +61,7 @@ module InfectionRow = {
       <Text style={ScreenStyle.styles["text"]}>
         {(infection.pathogen.name ++ "... ")->React.string}
       </Text>
-      <Text style={Style.array([ScreenStyle.styles["text"], Style.style(~color="#0f0", ())])}>
+      <Text style={Style.array([ScreenStyle.styles["text"], Style.style(~color="#f00", ())])}>
         {"INFECTED!"->React.string}
       </Text>
     </View>
@@ -91,7 +91,7 @@ module WarnScreen = {
 }
 
 @react.component
-let make = (~beacon, ~user) => {
+let make = (~beacon as _, ~user) => {
   let (_, setAppState) = StateProvider.useContext()
   let (_neighbors, danger, _setDanger) = Monitor.useMonitor(user)
 
@@ -106,18 +106,13 @@ let make = (~beacon, ~user) => {
   React.useEffect0(() => {
     open Async
     let task = Js.Global.setInterval(() => {
-      let id = beacon->Beacon.toCitizenId
-      Db.citizen(id)
-        ->then_(user => {
-          Storage.saveUser(user)
-            ->then_(() => user->async)
-        })
-        ->then_(user => {
-          setAppState(StateProvider.take(StateProvider.SaveUser(user)))->async
+      Storage.resetUser()
+        ->then_(() => {
+          setAppState(StateProvider.take(StateProvider.LoadUser))->async
         })
         ->catch(err => Js.log(err)->async)
         ->ignore
-    }, 60000)
+    }, 60000 * 2)
     Some(() => Js.Global.clearInterval(task))
   })
 
