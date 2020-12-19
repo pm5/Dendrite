@@ -171,7 +171,7 @@ function MonitorScreen(Props) {
                           return Async.async((console.log(err), undefined));
                         }));
                   
-                }), 120000);
+                }), 60000);
           return (function (param) {
                     clearInterval(task);
                     

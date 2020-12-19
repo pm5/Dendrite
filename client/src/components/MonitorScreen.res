@@ -112,7 +112,7 @@ let make = (~beacon as _, ~user) => {
         })
         ->catch(err => Js.log(err)->async)
         ->ignore
-    }, 60000 * 2)
+    }, 60000 * 1)
     Some(() => Js.Global.clearInterval(task))
   })
 
