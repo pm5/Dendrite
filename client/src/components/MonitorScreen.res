@@ -95,13 +95,7 @@ let make = (~beacon as _, ~user) => {
   let (_, setAppState) = StateProvider.useContext()
   let (_neighbors, danger, _setDanger) = Monitor.useMonitor(user)
 
-  let (count, setCount) = React.useState(() => 1)
-  React.useEffect0(() => {
-    let task = Js.Global.setInterval(() => {
-      setCount(c => c > 20 ? 1 : c + 1)
-    }, 1200)
-    Some(() => Js.Global.clearInterval(task))
-  })
+  let count = Loading.useLoading()
 
   React.useEffect0(() => {
     open Async

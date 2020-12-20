@@ -5,9 +5,13 @@ import * as Async from "../Async.bs.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
 import * as Beacon from "../core/Beacon.bs.js";
+import * as Loading from "../Loading.bs.js";
 import * as $$Storage from "../Storage.bs.js";
+import * as Caml_array from "bs-platform/lib/es6/caml_array.js";
+import * as ScreenStyle from "../styles/ScreenStyle.bs.js";
 import * as ReactNative from "react-native";
 import * as StateProvider from "../StateProvider.bs.js";
+import * as Caml_splice_call from "bs-platform/lib/es6/caml_splice_call.js";
 
 function LoadUserScreen(Props) {
   var beacon = Props.beacon;
@@ -32,9 +36,11 @@ function LoadUserScreen(Props) {
                 }));
           
         }), []);
+  var count = Loading.useLoading(undefined);
   return React.createElement(React.Fragment, undefined, React.createElement(ReactNative.View, {
                   children: React.createElement(ReactNative.Text, {
-                        children: "Loading user data from beacon " + Beacon.toCitizenId(beacon)
+                        style: ScreenStyle.styles.text,
+                        children: "Loading user data" + Caml_splice_call.spliceObjApply("", "concat", [Caml_array.caml_make_vect(count, ".")])
                       })
                 }));
 }

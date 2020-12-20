@@ -4,6 +4,7 @@ import * as Logo from "./Logo.bs.js";
 import * as Async from "../Async.bs.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
+import * as Loading from "../Loading.bs.js";
 import * as Monitor from "../Monitor.bs.js";
 import * as $$Storage from "../Storage.bs.js";
 import * as Belt_Array from "bs-platform/lib/es6/belt_Array.js";
@@ -142,25 +143,7 @@ function MonitorScreen(Props) {
   var setAppState = match[1];
   var match$1 = Monitor.useMonitor(user);
   var danger = match$1[1];
-  var match$2 = React.useState(function () {
-        return 1;
-      });
-  var setCount = match$2[1];
-  React.useEffect((function () {
-          var task = setInterval((function (param) {
-                  return Curry._1(setCount, (function (c) {
-                                if (c > 20) {
-                                  return 1;
-                                } else {
-                                  return c + 1 | 0;
-                                }
-                              }));
-                }), 1200);
-          return (function (param) {
-                    clearInterval(task);
-                    
-                  });
-        }), []);
+  var count = Loading.useLoading(undefined);
   React.useEffect((function () {
           var task = setInterval((function (param) {
                   Async.$$catch(Async.then_($$Storage.resetUser(undefined), (function (param) {
@@ -189,7 +172,7 @@ function MonitorScreen(Props) {
                             padding: 8
                           }
                         ],
-                        children: "Monitoring" + Caml_splice_call.spliceObjApply("", "concat", [Belt_Array.make(match$2[0], ".")])
+                        children: "Monitoring" + Caml_splice_call.spliceObjApply("", "concat", [Belt_Array.make(count, ".")])
                       }), React.createElement(ReactNative.View, {
                         style: styles.statusList,
                         children: React.createElement(ReactNative.ScrollView, {

@@ -20,9 +20,11 @@ let make = (~beacon) => {
     None
   })
 
+  let count = Loading.useLoading()
+
   <>
     <View>
-      <Text>{("Loading user data from beacon " ++ beacon->Beacon.toCitizenId)->React.string}</Text>
+      <Text style={ScreenStyle.styles["text"]}>{("Loading user data" ++ Array.make(count, ".")->Js.String.concatMany(""))->React.string}</Text>
     </View>
   </>
 }
